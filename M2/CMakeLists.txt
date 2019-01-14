@@ -8,15 +8,42 @@
 # from our build tree (see CMakeLists.txt in Macaulay2/e)
 ##################################################
 
-cmake_minimum_required(VERSION 3.6)
-#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+cmake_minimum_required(VERSION 3.10)
+project(Macaulay2 VERSION 1.12.0.1)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(macaulay2 VERSION 1.9 LANGUAGES C CXX)
+####################################################
+# header directory includes (CLion takes a while to index)
+####################################################
+include_directories(${PROJECT_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
+#
+include_directories(${CMAKE_SOURCE_DIR}/usr-host/include)
+include_directories(${CMAKE_SOURCE_DIR}/usr-host/include/gtest/include)
+#include_directories(/usr/local/include)  # not sure why not included by default
+#
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/c)
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/d)
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/e)
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/e/f4)
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/kernel/bibasis)
+include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/system)
 
-add_subdirectory(Macaulay2/e)
+####################################################
+# locate and include external libraries
+####################################################
+#find_package(PkgConfig REQUIRED)
+#pkg_search_module(GTest REQUIRED gtest_main)
+##
+#if(GTest_FOUND)
+#    message("GTEST IS FOUND!")
+#else()
+#    message("GTEST IS NOT FOUND")
+#endif()
 
 # target_include_directories(m2 PUBLIC
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
@@ -43,7 +70,9 @@ add_subdirectory(Macaulay2/e)
 
 
 # enable_testing()
-# add_executable(macaulay2-test Macaulay2/e/unit-tests/testMain.cpp)
+add_executable(macaulay2-test Macaulay2/e/unit-tests/testMain.cpp)
+target_link_libraries(macaulay2-test ${GTest_BOTH_LIBRARIES})
+add_test(AllTestsInFoo macaulay2-test)
 
 # find_package(GTest REQUIRED)
 # include_directories(${GTEST_INCLUDE_DIRS})
