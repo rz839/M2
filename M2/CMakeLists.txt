@@ -17,15 +17,15 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 ####################################################
-# header directory includes (CLion takes a while to index)
+# INCLUDE DIRECTORIES
 ####################################################
+
 include_directories(${PROJECT_SOURCE_DIR})
 include_directories(${CMAKE_SOURCE_DIR}/include)
-#
+
 include_directories(${CMAKE_SOURCE_DIR}/usr-host/include)
-include_directories(${CMAKE_SOURCE_DIR}/usr-host/include/gtest/include)
 #include_directories(/usr/local/include)  # not sure why not included by default
-#
+
 include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/c)
 include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/d)
 include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/e)
@@ -34,16 +34,22 @@ include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/kernel/bibasis)
 include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/system)
 
 ####################################################
-# locate and include external libraries
+# SET UP GTEST
 ####################################################
-#find_package(PkgConfig REQUIRED)
-#pkg_search_module(GTest REQUIRED gtest_main)
-##
-#if(GTest_FOUND)
-#    message("GTEST IS FOUND!")
-#else()
-#    message("GTEST IS NOT FOUND")
-#endif()
+
+enable_testing()
+
+set(GTEST_ROOT "${CMAKE_SOURCE_DIR}/libraries/build/googletest-release-1.8.0/googletest" CACHE PATH "")
+add_subdirectory(${GTEST_ROOT})
+
+find_package(GTest REQUIRED gtest gtest_main)
+include_directories(${GTEST_INCLUDE_DIRS})
+
+####################################################
+# UNIT TESTS - put in target lists instead
+####################################################
+
+add_subdirectory(Macaulay2/e/scratch)
 
 # target_include_directories(m2 PUBLIC
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
@@ -67,42 +73,4 @@ include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/system)
 # add_library(m2 STATIC class.cpp)
 # target_link_libraries(m2 STATIC )
 
-
-
-# enable_testing()
-add_executable(macaulay2-test Macaulay2/e/unit-tests/testMain.cpp)
-target_link_libraries(macaulay2-test ${GTest_BOTH_LIBRARIES})
-add_test(AllTestsInFoo macaulay2-test)
-
-# find_package(GTest REQUIRED)
-# include_directories(${GTEST_INCLUDE_DIRS})
-# target_link_libraries(macaulay2-test ${GTEST_BOTH_LIBRARIES})
-# add_test(AllTestsInFoo macaulay2-test)
-
-
-# add_executable(proj-test
-#   ${source_files}
-#   ${test_files}
-#   )
-
-# set(GTEST_INCLUDE_DIRS
-#   gtest-1.7.0/include
-#   gtest-1.7.0
-#   )
-
-# target_include_directories(proj-test PUBLIC
-#   ${GTEST_INCLUDE_DIRS}
-#   include
-#   )
-
-
-# include_directories("${PROJECT_BINARY_DIR}")
-# include_directories(
-#     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
-#     "BUILD/mike/builds.tmp/darwin64-gcc4.9/Macaulay2/d"
-#     "BUILD/mike/builds.tmp/darwin64-gcc4.9/Macaulay2/e-includes"
-#     include
-#     Macaulay2/e
-#     Macaulay2/c
-# )
 
