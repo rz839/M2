@@ -51,6 +51,15 @@ include_directories(${GTEST_INCLUDE_DIRS})
 
 add_subdirectory(Macaulay2/e/scratch)
 
+####################################################
+# PHONY TARGET FOR CLION
+####################################################
+
+file(GLOB SOURCES
+        Macaulay2/e/*.cpp
+        Macaulay2/e/*.hpp)
+add_executable(CLion ${SOURCES})
+
 # target_include_directories(m2 PUBLIC
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/Macaulay2/d"
