@@ -23,6 +23,8 @@ extern const int heap_size[GEOHEAP_SIZE];
 
 #endif
 
+#define RZ_SHOW() printf("%s\n", __PRETTY_FUNCTION__)
+
 // Local Variables:
 // compile-command: "make -C $M2BUILDDIR/Macaulay2/e "
 // indent-tabs-mode: nil
