@@ -53,7 +53,7 @@ add_subdirectory(Macaulay2/e/unit-tests)
 add_subdirectory(Macaulay2/e/more-tests)
 
 ####################################################
-# PHONY TARGET FOR CLION
+# DUMMY TARGET FOR CLION
 ####################################################
 
 file(GLOB SOURCES
@@ -61,7 +61,7 @@ file(GLOB SOURCES
         Macaulay2/e/*.hpp
         Macaulay2/e/unit-tests/*.cpp
         Macaulay2/e/unit-tests/*.hpp)
-add_executable(CLionPhony EXCLUDE_FROM_ALL ${SOURCES})
+add_executable(DummyCLion EXCLUDE_FROM_ALL ${SOURCES})
 
 # target_include_directories(m2 PUBLIC
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
