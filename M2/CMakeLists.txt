@@ -9,7 +9,7 @@
 ##################################################
 
 cmake_minimum_required(VERSION 3.10)
-project(Macaulay2 VERSION 1.12.0.1)
+project(Macaulay2 VERSION 1.14.0)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -39,9 +39,8 @@ include_directories(${CMAKE_SOURCE_DIR}/Macaulay2/system)
 
 enable_testing()
 
-set(GTEST_ROOT "${CMAKE_SOURCE_DIR}/libraries/build/googletest-release-1.8.0/googletest" CACHE PATH "")
+set(GTEST_ROOT "${CMAKE_SOURCE_DIR}/libraries/gtest/build/googletest-release-1.8.0/googletest" CACHE PATH "")
 add_subdirectory(${GTEST_ROOT})
-
 find_package(GTest REQUIRED gtest gtest_main)
 include_directories(${GTEST_INCLUDE_DIRS})
 
@@ -49,7 +48,9 @@ include_directories(${GTEST_INCLUDE_DIRS})
 # UNIT TESTS - put in target lists instead
 ####################################################
 
-add_subdirectory(Macaulay2/e/scratch)
+#add_subdirectory(Macaulay2/e/scratch)
+add_subdirectory(Macaulay2/e/unit-tests)
+add_subdirectory(Macaulay2/e/more-tests)
 
 ####################################################
 # PHONY TARGET FOR CLION
@@ -57,8 +58,10 @@ add_subdirectory(Macaulay2/e/scratch)
 
 file(GLOB SOURCES
         Macaulay2/e/*.cpp
-        Macaulay2/e/*.hpp)
-add_executable(CLion ${SOURCES})
+        Macaulay2/e/*.hpp
+        Macaulay2/e/unit-tests/*.cpp
+        Macaulay2/e/unit-tests/*.hpp)
+add_executable(CLionPhony EXCLUDE_FROM_ALL ${SOURCES})
 
 # target_include_directories(m2 PUBLIC
 #     "BUILD/mike/builds.tmp/darwin64-gcc4.9/include"
