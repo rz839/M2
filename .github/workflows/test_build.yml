@@ -84,7 +84,7 @@ jobs:
       - name: Install missing dev tools (apt-get)
         id: get_dev_tools_aptget
         if: ${{ runner.os == 'Linux' }}
-        run: sudo apt-get install -y ninja-build gmake
+        run: sudo apt-get install -y ninja-build
 
       - name: Install gtest from source
         id: step_gtest
@@ -119,8 +119,8 @@ jobs:
         if: ${{ matrix.config.build-system == 'automake' }}
         run: |
           cd M2
-          ${{matrix.config.make}} -f Makefile
           ${{matrix.config.make}} get-tools
+          ${{matrix.config.make}} -f Makefile
           mkdir M2/BUILD/cicd
           cd M2/BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
