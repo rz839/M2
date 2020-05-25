@@ -36,13 +36,13 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {
-            name: "macOS-latest cmake gcc9",
-            artifact: "macOS-gcc.tar.xz",
-            os: macos-latest,
-            cc: "gcc-9", cxx: "g++-9",
-            build-system: "cmake"
-          }
+#          - {
+#            name: "macOS-latest cmake gcc9",
+#            artifact: "macOS-gcc.tar.xz",
+#            os: macos-latest,
+#            cc: "gcc-9", cxx: "g++-9",
+#            build-system: "cmake"
+#          }
           - {
             name: "macOS-latest automake gcc9",
             artifact: "macOS-gcc.tar.xz",
@@ -50,13 +50,13 @@ jobs:
             cc: "gcc-9", cxx: "g++-9",
             build-system: "automake"
           }
-          - {
-            name: "Ubuntu-latest cmake gcc9",
-            artifact: "Ubuntu.tar.xz",
-            os: ubuntu-latest,
-            cc: "gcc-9", cxx: "g++-9",
-            build-system: "cmake"
-          }
+#          - {
+#            name: "Ubuntu-latest cmake gcc9",
+#            artifact: "Ubuntu.tar.xz",
+#            os: ubuntu-latest,
+#            cc: "gcc-9", cxx: "g++-9",
+#            build-system: "cmake"
+#          }
           - {
             name: "Ubuntu-latest automake gcc9",
             artifact: "Ubuntu.tar.xz",
@@ -82,7 +82,7 @@ jobs:
       - name: Install missing dev tools (apt-get)
         id: get_dev_tools_aptget
         if: ${{ runner.os == 'Linux' }}
-        run: sudo apt-get install -y ninja-build
+        run: sudo apt-get install -y ninja-build gmake
 
       - name: Install gtest from source
         id: step_gtest
