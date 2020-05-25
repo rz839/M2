@@ -118,6 +118,7 @@ jobs:
         run: |
           cd M2
           gmake -f Makefile
+          gmake get-tools
           mkdir M2/BUILD/cicd
           cd M2/BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
