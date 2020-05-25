@@ -97,7 +97,6 @@ jobs:
         id: step_configure_cmake
         if: ${{ matrix.config.build-system == 'cmake' }}
         run: |
-          gmake -f Makefile
           mkdir BUILD/cicd
           cd BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
