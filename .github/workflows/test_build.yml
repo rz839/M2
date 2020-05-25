@@ -116,6 +116,7 @@ jobs:
         id: step_configure_automake
         if: ${{ matrix.config.build-system == 'automake' }}
         run: |
+          cd M2
           gmake -f Makefile
           mkdir M2/BUILD/cicd
           cd M2/BUILD/cicd
