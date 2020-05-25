@@ -48,6 +48,7 @@ jobs:
             artifact: "macOS-gcc.tar.xz",
             os: macos-latest,
             cc: "gcc-9", cxx: "g++-9",
+            make: "gmake",
             build-system: "automake"
           }
 #          - {
@@ -62,6 +63,7 @@ jobs:
             artifact: "Ubuntu.tar.xz",
             os: ubuntu-latest,
             cc: "gcc-9", cxx: "g++-9",
+            make: "make",
             build-system: "automake"
           }
 
@@ -117,8 +119,8 @@ jobs:
         if: ${{ matrix.config.build-system == 'automake' }}
         run: |
           cd M2
-          gmake -f Makefile
-          gmake get-tools
+          ${{matrix.config.make}} -f Makefile
+          ${{matrix.config.make}} get-tools
           mkdir M2/BUILD/cicd
           cd M2/BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
@@ -129,7 +131,7 @@ jobs:
         if: ${{ matrix.config.build-system == 'automake' }}
         run: |
           cd M2/BUILD/cicd
-          gmake
+          ${{matrix.config.make}}
 
       - name: Run Tests
         id: step_run_tests
