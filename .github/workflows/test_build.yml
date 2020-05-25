@@ -121,8 +121,8 @@ jobs:
           cd M2
           ${{matrix.config.make}} get-tools
           ${{matrix.config.make}} -f Makefile
-          mkdir M2/BUILD/cicd
-          cd M2/BUILD/cicd
+          mkdir BUILD/cicd
+          cd BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
           ../../configure --enable-download --enable-build-libraries="readline"
 
