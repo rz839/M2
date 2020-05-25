@@ -109,10 +109,9 @@ jobs:
         id: step_build
         if: ${{ matrix.config.build-system == 'cmake' }}
         run: |
-          cd M2/BUILD/cicd
-          cmake --build M2/M2/BUILD/build --target build-libraries build-programs
-          cmake --build M2/M2/BUILD/build --target install-packages
-          cmake --build M2/M2/BUILD/build --target M2-emacs
+          cmake --build M2/BUILD/cicd --parallel 4 --target build-libraries build-programs
+          cmake --build M2/BUILD/cicd --parallel 4 --target install-packages
+          cmake --build M2/BUILD/cicd --parallel 4 --target M2-emacs
 
       - name: Configure Macaulay2 (automake)
         id: step_configure_automake
