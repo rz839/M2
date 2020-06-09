@@ -29,13 +29,27 @@ env:
 
 jobs:
   build:
-    name: ${{ matrix.config.name }}
-    runs-on: ${{ matrix.config.os }}
+    name: ${{matrix.os}}-${{matrix.build-type}}-${{matrix.compiler}}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      dir: M2/BUILD/cicd
     strategy:
       # eventually make this true
       fail-fast: false
       matrix:
-        config:
+        os: [macos-latest, ubuntu-latest]
+        build-type: [cmake, automake]
+        compiler: [gcc9, default]  # add clang
+        include:
+          - compiler: gcc9
+            cxx: g++-9
+            cc: gcc-9
+          - os: macos-latest
+            make: gmake
+          - os: ubuntu-latest
+            make: make
+#        language: [C++17, C++14]
+#        config:
 #          - {
 #            name: "macOS-latest cmake gcc9",
 #            artifact: "macOS-gcc.tar.xz",
@@ -43,14 +57,14 @@ jobs:
 #            cc: "gcc-9", cxx: "g++-9",
 #            build-system: "cmake"
 #          }
-          - {
-            name: "macOS-latest automake gcc9",
-            artifact: "macOS-gcc.tar.xz",
-            os: macos-latest,
-            cc: "gcc-9", cxx: "g++-9",
-            make: "gmake",
-            build-system: "automake"
-          }
+#          - {
+#            name: "macOS-latest automake gcc9",
+#            artifact: "macOS-gcc.tar.xz",
+#            os: macos-latest,
+#            cc: "gcc-9", cxx: "g++-9",
+#            make: "gmake",
+#            build-system: "automake"
+#          }
 #          - {
 #            name: "Ubuntu-latest cmake gcc9",
 #            artifact: "Ubuntu.tar.xz",
@@ -58,30 +72,38 @@ jobs:
 #            cc: "gcc-9", cxx: "g++-9",
 #            build-system: "cmake"
 #          }
-          - {
-            name: "Ubuntu-latest automake gcc9",
-            artifact: "Ubuntu.tar.xz",
-            os: ubuntu-latest,
-            cc: "gcc-9", cxx: "g++-9",
-            make: "make",
-            build-system: "automake"
-          }
+#          - {
+#            name: "Ubuntu-latest automake gcc9",
+#            artifact: "Ubuntu.tar.xz",
+#            os: ubuntu-latest,
+#            cc: "gcc-9", cxx: "g++-9",
+#            make: "make",
+#            build-system: "automake"
+#          }
 
     steps:
       - uses: actions/checkout@v1  # this set up the virtual environment, which has a whole lot
                                    # as of this writing: gcc9, clang10, cmake3.17, homebrew...
 
-      - name: Install missing dev tools (brew)
+# ----------------------
+#   Install missing tools and libraries using homebrew (macOS and Linux)
+# ----------------------
+
+      - name: Install missing dev tools (homebrew)
         id: get_dev_tools_brew
         if: ${{ runner.os == 'macOS' }}
         # autoconf, libtool are already in the virtual env
         run: brew install ninja pkg-config autoconf automake gnu-tar libtool yasm make
 
-      - name: Install libraries (brew)
+      - name: Install libraries (homebrew)
         id: get_dev_libraries_brew
         if: ${{ runner.os == 'macOS' }}
         # mpfr, gdbm, libmpc, xz are already in the virtual env
         run: brew install boost flint ntl mpir bdw-gc libatomic_ops glpk libomp eigen ncurses
+
+# ----------------------
+#   Install missing tools and libraries using apt-get (Debian-based Linux only)
+# ----------------------
 
       - name: Install missing dev tools (apt-get)
         id: get_dev_tools_aptget
@@ -92,53 +114,70 @@ jobs:
       - name: Install libraries (apt-get)
         id: get_dev_libraries_aptget
         if: ${{ runner.os == 'Linux' }}
-        run: sudo apt-get install -y -q autoconf bison curl emacs fflas-ffpack flex g++ gcc gfortran install-info libatomic-ops-dev libboost-dev libc6-dev libcdd-dev libgc-dev libgdbm-dev libgivaro-dev libglpk-dev libgmp3-dev libgtest-dev liblapack-dev liblzma-dev libmpc-dev libmpfr-dev libncurses-dev libncurses5-dev libntl-dev libreadline-dev libtool libxml2-dev libz-dev make openssh-server patch pinentry-curses pkg-config time unzip xbase-clients yasm zlib1g-dev polymake w3c-markup-validator git dpkg-dev gfan libeigen3-dev libtool-bin
+        # trim all this garbage
+        run: sudo apt-get install -y -q autoconf bison curl emacs fflas-ffpack flex g++ gcc gfortran \
+              install-info libatomic-ops-dev libboost-dev libc6-dev libcdd-dev libgc-dev libgdbm-dev \
+              libgivaro-dev libglpk-dev libgmp3-dev libgtest-dev liblapack-dev liblzma-dev libmpc-dev \
+              libmpfr-dev libncurses-dev libncurses5-dev libntl-dev libreadline-dev libtool libxml2-dev \
+              libz-dev make openssh-server patch pinentry-curses pkg-config time unzip xbase-clients yasm \
+              zlib1g-dev polymake w3c-markup-validator git dpkg-dev gfan libeigen3-dev libtool-bin
 
-      - name: Install gtest from source
-        id: step_gtest
-        run: |
-          git clone https://github.com/google/googletest.git
-          mkdir googletest/build && cd googletest/build
-          CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} cmake .. -G"Ninja" -DBUILD_SHARED_LIBS=ON
-          ninja
-          sudo ninja install
-          pwd
+# ----------------------
+#   Steps common to all build variants
+# ----------------------
+
+      - name: Create build directory
+        id: step_build_dir
+        run: mkdir ${{defaults.dir}}
+
+# ----------------------
+#   Configure and build M2 using cmake
+# ----------------------
 
       - name: Configure Macaulay2 (cmake)
         id: step_configure_cmake
-        if: ${{ matrix.config.build-system == 'cmake' }}
+        if: ${{ matrix.build-type == 'cmake' }}
+#        working-directory: ${{ defaults.dir }}
+        working-directory: M2/BUILD/cicd
         run: |
-          mkdir M2/BUILD/cicd
-          cd M2/BUILD/cicd
-          CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
+          CXX=${{matrix.cxx}} CC=${{matrix.cc}} \
           cmake -S../.. -B. -G"Ninja" -DCMAKE_BUILD_TYPE=Release
 
       - name: Build Macaulay2 (cmake)
         id: step_build
-        if: ${{ matrix.config.build-system == 'cmake' }}
+        if: ${{ matrix.build-type == 'cmake' }}
+        working-directory: M2/BUILD/cicd
         run: |
-          cmake --build M2/BUILD/cicd --parallel 4 --target build-libraries build-programs
-          cmake --build M2/BUILD/cicd --parallel 4 --target install-packages
-          cmake --build M2/BUILD/cicd --parallel 4 --target M2-emacs
+          cmake --build . --target build-libraries  --parallel 4
+          cmake --build . --target build-programs   --parallel 4
+          cmake --build . --target install-packages --parallel 4
+          cmake --build . --target M2-emacs         --parallel 4
+
+# ----------------------
+#   Configure and build M2 the old way
+# ----------------------
 
       - name: Configure Macaulay2 (automake)
         id: step_configure_automake
-        if: ${{ matrix.config.build-system == 'automake' }}
+        if: ${{ matrix.build-type == 'automake' }}
         run: |
           cd M2
-          ${{matrix.config.make}} get-tools
-          ${{matrix.config.make}} -f Makefile
-          mkdir BUILD/cicd
+          ${{matrix.make}} get-tools
+          ${{matrix.make}} -f Makefile
           cd BUILD/cicd
           CXX=${{matrix.config.cxx}} CC=${{matrix.config.cc}} \
           ../../configure --enable-download --enable-build-libraries="readline"
 
       - name: Build Macaulay2 (automake)
         id: step_build_automake
-        if: ${{ matrix.config.build-system == 'automake' }}
+        if: ${{ matrix.build-type == 'automake' }}
         run: |
           cd M2/BUILD/cicd
-          ${{matrix.config.make}}
+          ${{matrix.make}}
+
+# ----------------------
+#   Run tests (Skip for now given the build failures)
+# ----------------------
 
       - name: Run Tests
         id: step_run_tests
