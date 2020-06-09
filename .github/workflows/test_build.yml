@@ -26,9 +26,7 @@ env:
 #  NINJA_VERSION: 1.9.0
   # needs BuildFast
   BUILD_TYPE: Release
-
-defaults:
-  dir: M2/BUILD/cicd
+  BUILD_DIR: M2/BUILD/cicd
 
 jobs:
   build:
@@ -129,7 +127,7 @@ jobs:
 
       - name: Create build directory
         id: step_build_dir
-        run: mkdir ${{defaults.dir}}
+        run: mkdir $BUILD_DIR
 
 # ----------------------
 #   Configure and build M2 using cmake
@@ -172,9 +170,8 @@ jobs:
       - name: Build Macaulay2 (automake)
         id: step_build_automake
         if: ${{ matrix.build-type == 'automake' }}
-        run: |
-          cd M2/BUILD/cicd
-          ${{matrix.make}}
+        working-directory: M2/BUILD/cicd
+        run: ${{matrix.make}}
 
 # ----------------------
 #   Run tests (Skip for now given the build failures)
