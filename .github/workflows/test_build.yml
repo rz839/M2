@@ -27,12 +27,13 @@ env:
   # needs BuildFast
   BUILD_TYPE: Release
 
+defaults:
+  dir: M2/BUILD/cicd
+
 jobs:
   build:
     name: ${{matrix.os}}-${{matrix.build-type}}-${{matrix.compiler}}
     runs-on: ${{ matrix.os }}
-    defaults:
-      dir: M2/BUILD/cicd
     strategy:
       # eventually make this true
       fail-fast: false
