@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="$PROJECT_DIR$/.." vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BUILD/gcc9rel/libraries/fflas_ffpack/build" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BUILD/gcc9rel/libraries/frobby/build" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/bdwgc" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/fflas_ffpack" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/flint2" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/frobby" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/givaro" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/googletest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/libatomic_ops" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/mathic" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/mathicgb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/memtailor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/submodules/mpir" vcs="Git" />
+  </component>
+</project>
