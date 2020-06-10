@@ -13,7 +13,7 @@ class IRing
 };
 
 template <typename Derived>
-class RingBase : virtual IRing
+class RingBase : virtual IRing, public MutableEngineObject
 {
 protected:
   const Derived* crtp() const { return static_cast<const Derived*>(this); }

@@ -51,8 +51,7 @@ class CoefficientRingR;
     xxx
     xxx
 */
-class Ring : public RingBase<Ring>,
-             public MutableEngineObject
+class Ring : public RingBase<Ring>
 {
 public:
   using RingBase<Ring>::power;
