@@ -982,6 +982,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="305f45f6-83a9-477a-9289-fe3386f766d2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/.travis.yml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/AUTHORS" beforeDir="false" />
@@ -1427,6 +1428,7 @@
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/tests/test-ruint_square.C" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/tests/test-trunc.C" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/BUILD/gcc9rel/libraries/givaro/build/tests/test_leak.sh" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -7291,7 +7293,7 @@
       <option name="presentableId" value="Default" />
       <updated>1591651838866</updated>
       <workItem from="1591651849694" duration="851000" />
-      <workItem from="1591659689508" duration="9769000" />
+      <workItem from="1591659689508" duration="10473000" />
     </task>
     <servers />
   </component>
