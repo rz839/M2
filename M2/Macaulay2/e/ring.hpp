@@ -11,6 +11,11 @@
 #include "exceptions.hpp"
 ///// Ring Hierarchy ///////////////////////////////////
 
+/***************
+ * CRTP includes
+ ***************/
+#include "rings/Ring.hpp"
+
 class RingZZ;
 class RRR;
 class CCC;
@@ -46,8 +51,12 @@ class CoefficientRingR;
     xxx
     xxx
 */
-class Ring : public MutableEngineObject
+class Ring : public RingBase<Ring>,
+             public MutableEngineObject
 {
+public:
+  using RingBase<Ring>::power;
+
  protected:
   const ARing *getARing() const { return AR; }
   long mCharacteristic;  // not all rings will have characteristic that fits in
@@ -316,7 +325,7 @@ class Ring : public MutableEngineObject
   virtual ring_elem mult(const ring_elem f, const ring_elem g) const = 0;
 
   virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
-  virtual ring_elem power(const ring_elem f, int n) const;
+//  virtual ring_elem power(const ring_elem f, int n) const;
   // These two power routines can be used for n >= 0.
 
   virtual ring_elem invert(const ring_elem f) const = 0;

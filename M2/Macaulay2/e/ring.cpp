@@ -142,45 +142,45 @@ ring_elem Ring::power(const ring_elem gg, mpz_srcptr m) const
     }
 }
 
-ring_elem Ring::power(const ring_elem gg, int n) const
-{
-  ring_elem ff = gg;
-  if (n == 0) return one();
-  if (n < 0)
-    {
-      n = -n;
-      ff = invert(ff);
-      if (is_zero(ff))
-        {
-          ERROR("negative power of noninvertible element requested");
-          return ff;
-        }
-    }
-
-  // The exponent 'n' should be > 0 here.
-  ring_elem prod = from_long(1);
-  ring_elem base = copy(ff);
-  ring_elem tmp;
-
-  for (;;)
-    {
-      if ((n % 2) != 0)
-        {
-          tmp = mult(prod, base);
-          prod = tmp;
-        }
-      n >>= 1;
-      if (n == 0)
-        {
-          return prod;
-        }
-      else
-        {
-          tmp = mult(base, base);
-          base = tmp;
-        }
-    }
-}
+//ring_elem Ring::power(const ring_elem gg, int n) const
+//{
+//  ring_elem ff = gg;
+//  if (n == 0) return one();
+//  if (n < 0)
+//    {
+//      n = -n;
+//      ff = invert(ff);
+//      if (is_zero(ff))
+//        {
+//          ERROR("negative power of noninvertible element requested");
+//          return ff;
+//        }
+//    }
+//
+//  // The exponent 'n' should be > 0 here.
+//  ring_elem prod = from_long(1);
+//  ring_elem base = copy(ff);
+//  ring_elem tmp;
+//
+//  for (;;)
+//    {
+//      if ((n % 2) != 0)
+//        {
+//          tmp = mult(prod, base);
+//          prod = tmp;
+//        }
+//      n >>= 1;
+//      if (n == 0)
+//        {
+//          return prod;
+//        }
+//      else
+//        {
+//          tmp = mult(base, base);
+//          base = tmp;
+//        }
+//    }
+//}
 
 void Ring::mult_to(ring_elem &f, const ring_elem g) const { f = mult(f, g); }
 void Ring::add_to(ring_elem &f, ring_elem &g) const { f = add(f, g); }
