@@ -28,8 +28,8 @@ M2_bool rawIdealOfPoints(const Ring *R,
       ERROR("expected polynomial ring with same coefficient ring");
       return false;
     }
-  const Z_mod *KZZp = K->cast_to_Z_mod();
-  if (KZZp != 0)
+  auto* KZZp = dynamic_cast<const Z_mod*>(K);
+  if (KZZp)
     {
       DMat<M2::ARingZZp> *Pts1 = 0;
       *result_GB = PointsComputation<M2::ARingZZp>::points(

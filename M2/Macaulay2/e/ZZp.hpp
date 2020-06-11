@@ -39,8 +39,6 @@ class Z_mod : public Ring
   static Z_mod *create(int p);
 
   bool isFinitePrimeField() const { return true; }
-  Z_mod *cast_to_Z_mod() { return this; }
-  const Z_mod *cast_to_Z_mod() const { return this; }
   CoefficientRingZZp *get_CoeffRing() const { return coeffR; }
   M2::ARingZZp *get_ARing() const { return aringZZp; }
   virtual MutableMatrix *makeMutableMatrix(size_t nrows,

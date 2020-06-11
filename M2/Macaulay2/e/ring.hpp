@@ -14,15 +14,10 @@
 class RingZZ;
 class RRR;
 class CCC;
-class Z_mod;
-class GF;
 class Tower;
-class FractionField;
-class LocalRing;
 class PolynomialRing;
 class PolyRing;
 class PolyRingFlat;
-class PolyQQ;
 class SkewPolynomialRing;
 class SchurRing;
 class SchurRing2;
@@ -174,41 +169,22 @@ class Ring : public MutableEngineObject
   ///////////////////////////////////
   // Casting up the ring hierarchy //
   ///////////////////////////////////
-  virtual const RingZZ *cast_to_RingZZ() const { return 0; }
-  virtual RingZZ *cast_to_RingZZ() { return 0; }
-  virtual const Z_mod *cast_to_Z_mod() const { return 0; }
-  virtual Z_mod *cast_to_Z_mod() { return 0; }
-  virtual const GF *cast_to_GF() const { return 0; }
-  virtual GF *cast_to_GF() { return 0; }
   virtual const Tower *cast_to_Tower() const { return 0; }
   virtual Tower *cast_to_Tower() { return 0; }
   virtual const PolynomialRing *cast_to_PolynomialRing() const { return 0; }
   virtual PolynomialRing *cast_to_PolynomialRing() { return 0; }
   virtual const PolyRing *cast_to_PolyRing() const { return 0; }
   virtual PolyRing *cast_to_PolyRing() { return 0; }
-  virtual const PolyQQ *cast_to_PolyQQ() const { return 0; }
-  virtual PolyQQ *cast_to_PolyQQ() { return 0; }
   virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return 0; }
   virtual PolyRingFlat *cast_to_PolyRingFlat() { return 0; }
-  virtual const FractionField *cast_to_FractionField() const { return 0; }
-  virtual FractionField *cast_to_FractionField() { return 0; }
-  virtual const LocalRing *cast_to_LocalRing() const { return 0; }
-  virtual LocalRing *cast_to_LocalRing() { return 0; }
 
+  // these cannot quite be removed yet
   virtual const SchurRing *cast_to_SchurRing() const { return 0; }
   virtual SchurRing *cast_to_SchurRing() { return 0; }
-  virtual const SchurRing2 *cast_to_SchurRing2() const { return 0; }
-  virtual SchurRing2 *cast_to_SchurRing2() { return 0; }
-  virtual const SchurSnRing *cast_to_SchurSnRing() const { return 0; }
-  virtual SchurSnRing *cast_to_SchurSnRing() { return 0; }
-  virtual const SkewPolynomialRing *cast_to_SkewPolynomialRing() const
-  {
-    return 0;
-  }
-  virtual SkewPolynomialRing *cast_to_SkewPolynomialRing() { return 0; }
   virtual const SolvableAlgebra *cast_to_SolvableAlgebra() const { return 0; }
   virtual SolvableAlgebra *cast_to_SolvableAlgebra() { return 0; }
   virtual const WeylAlgebra *cast_to_WeylAlgebra() const { return 0; }
+
   virtual RRR *cast_to_RRR() { return 0; }
   virtual const RRR *cast_to_RRR() const { return 0; }
   virtual CCC *cast_to_CCC() { return 0; }

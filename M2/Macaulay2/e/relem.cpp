@@ -366,14 +366,13 @@ const RingElement /* or null */ *RingElement::split_off_content(
 
 RingElement *RingElement::numerator() const
 {
-  if (R == globalQQ) return new RingElement(globalZZ, globalQQ->numerator(val));
-  const FractionField *K = R->cast_to_FractionField();
-  if (K != nullptr)
+  if (R == globalQQ)
+    return new RingElement(globalZZ, globalQQ->numerator(val));
+  if (auto* K = dynamic_cast<const FractionField*>(R))
     return new RingElement(K->get_ring(), K->numerator(val));
-
-  const LocalRing *L = R->cast_to_LocalRing();
-  if (L != nullptr)
+  if (auto* L = dynamic_cast<const LocalRing*>(R))
     return new RingElement(L->get_ring(), L->numerator(val));
+
   ERROR("fraction field or local ring required");
   return nullptr;
 }
@@ -382,12 +381,11 @@ RingElement *RingElement::denominator() const
 {
   if (R == globalQQ)
     return new RingElement(globalZZ, globalQQ->denominator(val));
-  const FractionField *K = R->cast_to_FractionField();
-  if (K != nullptr)
+  if (auto* K = dynamic_cast<const FractionField*>(R))
     return new RingElement(K->get_ring(), K->denominator(val));
-  const LocalRing *L = R->cast_to_LocalRing();
-  if (L != nullptr)
+  if (auto* L = dynamic_cast< const LocalRing*>(R))
     return new RingElement(L->get_ring(), L->denominator(val));
+
   ERROR("fraction field or local rings required");
   return nullptr;
 }
@@ -398,8 +396,7 @@ RingElement *RingElement::fraction(const Ring *K,
   if (K == globalQQ)
     return new RingElement(globalQQ,
                            globalQQ->fraction(val, bottom->get_value()));
-  const FractionField *K1 = K->cast_to_FractionField();
-  if (K1 != nullptr)
+  if (auto* K1 = dynamic_cast<const FractionField*>(K))
     {
       if (K1->get_ring() != R)
         {
@@ -408,8 +405,7 @@ RingElement *RingElement::fraction(const Ring *K,
         }
       return new RingElement(K1, K1->fraction(val, bottom->get_value()));
     }
-  const LocalRing *L1 = K->cast_to_LocalRing();
-  if (L1 != nullptr)
+  if (auto* L1 = dynamic_cast<const LocalRing*>(K))
     {
       if (L1->get_ring() != R)
         {
@@ -418,6 +414,7 @@ RingElement *RingElement::fraction(const Ring *K,
         }
       return new RingElement(L1, L1->fraction(val, bottom->get_value()));
     }
+
   ERROR("fraction field or local ring required");
   return nullptr;
 }

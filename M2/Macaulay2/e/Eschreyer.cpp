@@ -9,8 +9,9 @@
 GBMatrix::GBMatrix(const FreeModule *F0) : F(F0) {}
 GBMatrix::GBMatrix(const Matrix *m) : F(m->rows())
 {
-  const PolynomialRing *R = F->get_ring()->cast_to_PolynomialRing();
-  assert(R != 0);
+  auto* R = dynamic_cast<const PolynomialRing*>(F->get_ring());
+  assert(R != 0);  // FIXME(RZ): this disappears in non-Debug builds
+                   //            what if F->get_ring() isn't polynomial?
   for (int i = 0; i < m->n_cols(); i++)
     {
       ring_elem denom;
@@ -22,7 +23,7 @@ GBMatrix::GBMatrix(const Matrix *m) : F(m->rows())
 void GBMatrix::append(gbvector *g) { elems.push_back(g); }
 Matrix *GBMatrix::to_matrix()
 {
-  const PolynomialRing *R = F->get_ring()->cast_to_PolynomialRing();
+  auto* R = dynamic_cast<const PolynomialRing*>(F->get_ring());
   assert(R != 0);
   const FreeModule *G = FreeModule::make_schreyer(this);
   MatrixConstructor mat(F, G);
@@ -41,7 +42,7 @@ GBKernelComputation::GBKernelComputation(const GBMatrix *m)
       n_others(0),
       total_reduce_count(0)
 {
-  const PolynomialRing *R0 = F->get_ring()->cast_to_PolynomialRing();
+  auto* R0 = dynamic_cast<const PolynomialRing*>(F->get_ring());
   GR = R0->get_gb_ring();
   R = R0;
   K = R->getCoefficients();

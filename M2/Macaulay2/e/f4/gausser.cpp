@@ -6,9 +6,9 @@
 
 Gausser *Gausser::newGausser(const Ring *K, F4Mem *Mem0)
 {
-  const Z_mod *Kp = K->cast_to_Z_mod();
-  if (Kp != 0) return new Gausser(Kp, Mem0);
-  return 0;
+  auto* Kp = dynamic_cast<const Z_mod*>(K);
+  if (Kp) return new Gausser(Kp, Mem0);
+  return nullptr;
 }
 
 Gausser::Gausser(const Z_mod *K0, F4Mem *Mem0)

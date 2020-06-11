@@ -76,8 +76,8 @@ GBRing::GBRing(const Ring *K0, const Monoid *M0)
   gbvector_size = sizeofgbvector(((gbvector *)0), M->monomial_size());
   mem = new stash("gbvector", gbvector_size);
 
-  const Z_mod *Kp = K->cast_to_Z_mod();
-  if (Kp != 0) zzp = Kp->get_CoeffRing();
+  auto* Kp = dynamic_cast<const Z_mod*>(K);
+  if (Kp) zzp = Kp->get_CoeffRing();
 
   if (K == globalQQ) K = globalZZ;
   if (K == globalZZ) _coeffs_ZZ = true;

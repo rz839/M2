@@ -13,7 +13,7 @@
 
 Ring::CoefficientType FractionField::coefficient_type() const
 {
-  const PolynomialRing *A = R_->cast_to_PolynomialRing();
+  const PolynomialRing* A = R_;
   assert(A != 0);
   const Ring *K = A->getCoefficientRing();
   if (K->coefficient_type() == COEFF_ZZ) return COEFF_QQ;
@@ -32,15 +32,9 @@ bool FractionField::initialize_frac(const PolyRingFlat *R)
   oneV = from_long(1);
   minus_oneV = from_long(-1);
 
-  if (R->n_quotients() > 0 ||
-      R->getCoefficients()
-          ->cast_to_FractionField()  // disallowed in x-relem.cpp
-      ||
-      R->getMonoid()->getNonTermOrderVariables()->len >
-          0)  // disallowed in x-relem.cpp
-    use_gcd_simplify = false;
-  else
-    use_gcd_simplify = true;
+  use_gcd_simplify = !(R->n_quotients() > 0
+                       || dynamic_cast<const FractionField *>(R->getCoefficients()) // disallowed in x-relem.cpp
+                       || R->getMonoid()->getNonTermOrderVariables()->len > 0);     // same
 #ifdef DEVELOPMENT
 #warning "frac simplify: doesn't handle towers of fracs"
 #endif

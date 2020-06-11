@@ -60,8 +60,10 @@ void PolynomialRing::initialize_PolynomialRing(const Ring *K,
     {
       // We must set the non-commutative settings ourselves at this time
       if (numeratorR->cast_to_WeylAlgebra() != 0)
+//      if (dynamic_cast<const WeylAlgebra*>(numeratorR))
         is_weyl_ = true;
       else if (numeratorR->cast_to_SolvableAlgebra() != 0)
+//      else if (dynamic_cast<const SolvableAlgebra*>(numeratorR))
         is_solvable_ = true;
       else if (numeratorR->is_skew_commutative())
         {

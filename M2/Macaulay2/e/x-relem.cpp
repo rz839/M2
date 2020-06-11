@@ -233,13 +233,12 @@ const Ring /* or null */ *IM2_Ring_frac(const Ring *R)
           ERROR("cannot make fraction field over approximate field base");
           return 0;
         }
-      if (P->getCoefficients()->cast_to_FractionField() != 0)
+      if (dynamic_cast<const FractionField*>(P->getCoefficients()))
         {
-          ERROR(
-              "fraction fields over other fraction fields not yet implemented");
+          ERROR("fraction fields over other fraction fields not yet implemented");
           return 0;
         }
-      if (P->getCoefficients()->cast_to_LocalRing() != 0)
+      if (dynamic_cast<const LocalRing*>(P->getCoefficients()))
         {
           ERROR("fraction fields over other local rings not yet implemented");
           return 0;
@@ -976,23 +975,19 @@ engine_RawArrayPairOrNull IM2_RingElement_list_form(
 {
   try
     {
-      const PolynomialRing *P = f->get_ring()->cast_to_PolynomialRing();
-      if (P != 0)
-        {
-          return P->list_form(coeffRing, f->get_value());
-        }
-      const SchurRing2 *S = f->get_ring()->cast_to_SchurRing2();
-      if (S != 0)
-        {
-          return S->list_form(coeffRing, f->get_value());
-        }
+      if (auto* P = dynamic_cast<const PolynomialRing*>(f->get_ring()))
+        return P->list_form(coeffRing, f->get_value());
+      if (auto* S = dynamic_cast<const SchurRing2*>(f->get_ring()))
+        return S->list_form(coeffRing, f->get_value());
+
       ERROR("expected a polynomial");
-      return 0;
-  } catch (const exc::engine_error& e)
+      return nullptr;
+    }
+  catch (const exc::engine_error& e)
     {
       ERROR(e.what());
-      return NULL;
-  }
+      return nullptr;
+    }
 }
 
 engine_RawRingElementArray rawGetParts(const M2_arrayint wts,
@@ -1286,8 +1281,8 @@ const RingElement /* or null */ *rawSchurSnTensorMult(const RingElement *a,
 {
   try
     {
-      const SchurSnRing *R = a->get_ring()->cast_to_SchurSnRing();
-      if (R == 0)
+      auto* R = dynamic_cast<const SchurSnRing*>(a->get_ring());
+      if (R == nullptr)
         {
           ERROR("expected a SchurSn ring element");
           return 0;
@@ -1315,22 +1310,22 @@ const RingElement /* or null */ *rawSchurFromPartition(const Ring *R,
   // if R has a limit on the size of partitions, then
   try
     {
-      const SchurRing2 *S = R->cast_to_SchurRing2();
-      if (S == 0)
+      if (auto* S = dynamic_cast<const SchurRing2*>(R))
         {
-          ERROR("expected a Schur ring");
-          return 0;
+          // Check that part is a partition, and that the number of parts is <=
+          // number allowed
+          if (!S->is_valid_partition(part)) return 0;
+          ring_elem result = S->from_partition(part);
+          return RingElement::make_raw(S, result);
         }
-      // Check that part is a partition, and that the number of parts is <=
-      // number allowed
-      if (!S->is_valid_partition(part)) return 0;
-      ring_elem result = S->from_partition(part);
-      return RingElement::make_raw(S, result);
-  } catch (const exc::engine_error& e)
+      ERROR("expected a Schur ring");
+      return 0;
+    }
+  catch (const exc::engine_error& e)
     {
       ERROR(e.what());
       return NULL;
-  }
+    }
 }
 /* Special routines for tower rings */
 

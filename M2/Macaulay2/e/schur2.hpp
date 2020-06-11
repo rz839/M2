@@ -128,8 +128,6 @@ class SchurRing2 : public Ring
   static SchurRing2 *create(const Ring *A, int n = -1);
   static SchurRing2 *createInfinite(const Ring *A);
 
-  virtual const SchurRing2 *cast_to_SchurRing2() const { return this; }
-  virtual SchurRing2 *cast_to_SchurRing2() { return this; }
   bool is_valid_partition(M2_arrayint part, bool set_error = true) const;
   // sets global error message by default
 

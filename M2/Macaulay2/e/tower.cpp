@@ -506,7 +506,7 @@ const RingElement *rawTowerTranslatePoly(const Ring *newRing,
   // either: F is an element in a Tower, or is an element in a PolynomialRing.
   // In both cases: the number of variables and the characteristic should
   // be the same.
-  const PolynomialRing *P = F->get_ring()->cast_to_PolynomialRing();
+  auto* P = dynamic_cast<const PolynomialRing*>(F->get_ring());
   const Tower *T = newRing->cast_to_Tower();
   if (P != 0 && T != 0)
     {

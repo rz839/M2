@@ -36,8 +36,6 @@ class GF : public Ring
   static GF *create(const RingElement *prim);
 
   int extension_degree() const { return Qexp_; }
-  GF *cast_to_GF() { return this; }
-  const GF *cast_to_GF() const { return this; }
   virtual bool isGaloisField() const { return true; }
   const RingElement *getMinimalPolynomial() const;
   // returns the polynomial f(t) mentioned in the def of _originalR above.

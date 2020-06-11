@@ -169,6 +169,7 @@ ring_elem RingMap::eval_term(const Ring *sourceK,
   if (!R->is_commutative_ring() || R->cast_to_SchurRing())
     {
       // This is the only non-commutative case so far
+      // FIXME(RZ): what about SchurRing2?
       for (index_varpower i = vp; i.valid(); ++i)
         {
           int v = first_var + i.var();

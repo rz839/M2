@@ -36,9 +36,6 @@ class LocalRing : public Ring
   ring_elem set_non_unit_frac(ring_elem top) const;
 
  public:
-  LocalRing *cast_to_LocalRing() { return this; }
-  const LocalRing *cast_to_LocalRing() const { return this; }
-
   const PolyRing *get_ring() const { return mRing; }
   unsigned long get_precision() const { return mRing->get_precision(); }
 

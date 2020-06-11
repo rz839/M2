@@ -158,7 +158,7 @@ ring_elem LocalRing::set_non_unit_frac(ring_elem top) const
 
 Ring::CoefficientType LocalRing::coefficient_type() const
 {
-  const PolynomialRing *A = mRing->cast_to_PolynomialRing();
+  const PolynomialRing *A = mRing;
   assert(A != 0);
   const Ring *K = A->getCoefficientRing();
   if (K->coefficient_type() == COEFF_ZZ) return COEFF_QQ;
@@ -742,8 +742,8 @@ unsigned int LocalRing::computeHashValue(const ring_elem f) const
 
 Matrix *rawLiftLocalMatrix(const Ring *R, const Matrix *f)
 {
-  const LocalRing *L = f->get_ring()->cast_to_LocalRing();
-  if (L == 0)
+  auto* L = dynamic_cast<const LocalRing*>(f->get_ring());
+  if (L == nullptr)
     {
       ERROR("expected an object over a local ring");
       return nullptr;
@@ -761,13 +761,11 @@ Matrix *rawLiftLocalMatrix(const Ring *R, const Matrix *f)
 
 M2_bool rawIsLocalUnit(const RingElement *f)
 {
-  const LocalRing *L = f->get_ring()->cast_to_LocalRing();
-  if (L == 0)
-    {
-      ERROR("expected an object over a local ring");
-      return false;
-    }
-  return L->is_unit(f->get_value());
+  if (auto* L = dynamic_cast<const LocalRing*>(f->get_ring()))
+    return L->is_unit(f->get_value());
+
+  ERROR("expected an object over a local ring");
+  return false;
 }
 
 // Local Variables:

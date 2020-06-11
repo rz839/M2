@@ -19,7 +19,7 @@ class MutableComplex : public MutableEngineObject
   MutableComplex() {}
   MutableComplex(VECTOR(MutableMatrix *) & D)
       : mRing(D[0]->get_ring()),
-        mLocalRing(mRing->cast_to_LocalRing()),
+        mLocalRing(dynamic_cast<const LocalRing*>(mRing)),
         mPolynomialRing(mLocalRing == 0 ? mRing->cast_to_PolynomialRing()
                                         : mLocalRing->get_ring()),
         mDifferential(D)

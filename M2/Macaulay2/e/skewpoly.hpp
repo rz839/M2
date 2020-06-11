@@ -24,11 +24,6 @@ class SkewPolynomialRing : public PolyRing
   virtual bool has_gcd() const { return false; }
   virtual bool is_skew_commutative_ring() const { return true; }
   virtual bool is_commutative_ring() const { return false; }
-  virtual const SkewPolynomialRing *cast_to_SkewPolynomialRing() const
-  {
-    return this;
-  }
-  virtual SkewPolynomialRing *cast_to_SkewPolynomialRing() { return this; }
   virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
   virtual ring_elem power(const ring_elem f, int n) const;
 

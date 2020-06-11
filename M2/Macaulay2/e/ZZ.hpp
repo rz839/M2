@@ -45,8 +45,6 @@ class RingZZ : public Ring
   bool initialize_ZZ(const PolynomialRing *deg_ring);
   //////////////////////////////////////////////
 
-  RingZZ *cast_to_RingZZ() { return this; }
-  const RingZZ *cast_to_RingZZ() const { return this; }
   M2::ARingZZGMP *get_ARing() const
   {
     return coeffR;

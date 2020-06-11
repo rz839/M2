@@ -441,8 +441,7 @@ bool SchurRing2::promote(const Ring *Rf,
     }
   else
     {
-      const SchurRing2 *Sf = Rf->cast_to_SchurRing2();
-      if (Sf != 0)
+      if (auto* Sf = dynamic_cast<const SchurRing2*>(Rf))
         {
           if (coefficientRing == Sf->getCoefficientRing())
             {
@@ -471,8 +470,7 @@ bool SchurRing2::lift(const Ring *Rg,
     }
   else
     {
-      const SchurRing2 *Sg = Rg->cast_to_SchurRing2();
-      if (Sg != 0)
+      if (auto Sg = dynamic_cast<const SchurRing2*>(Rg))
         {
           if (coefficientRing == Sg->getCoefficientRing())
             {

@@ -51,7 +51,7 @@ static enum factoryCoeffMode coeffMode(const PolynomialRing *P)
   const Ring *F = P->getCoefficientRing();
   // if (F->cast_to_QQ()) return modeQQ;
   if (F->is_QQ()) return modeQQ;
-  if (F->cast_to_RingZZ()) return modeZZ;
+  if (dynamic_cast<const RingZZ*>(F)) return modeZZ;
   if (F->isFinitePrimeField()) return modeZn;
   if (F->isGaloisField()) return modeGF;
   ERROR("expected coefficient ring of the form ZZ/n, ZZ, QQ, or GF");
