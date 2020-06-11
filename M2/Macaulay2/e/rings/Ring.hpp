@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Ring.h"
+#include "RingEnum.h"
 
 //template <typename D>
 //ring_elem RingBase<D>::impl_mult(ring_elem f, ring_elem g)

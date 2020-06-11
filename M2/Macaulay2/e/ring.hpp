@@ -177,6 +177,20 @@ public:
   ///////////////////////////////////
   // Casting up the ring hierarchy //
   ///////////////////////////////////
+  virtual bool has_trait(M2::RingTrait trait)
+  {
+    switch (trait)
+    {
+    case M2::RingTrait::IS_BASIC_RING:
+    case M2::RingTrait::IS_COMMUTATIVE:
+    case M2::RingTrait::IS_GRADED:
+      return true;
+    default:
+      return false;
+    }
+  }
+  virtual M2::RingTypeId get_typeid() { return M2::RingTypeId::RING; }
+
   virtual const Tower *cast_to_Tower() const { return 0; }
   virtual Tower *cast_to_Tower() { return 0; }
   virtual const PolynomialRing *cast_to_PolynomialRing() const { return 0; }
