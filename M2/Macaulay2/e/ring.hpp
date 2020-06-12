@@ -94,11 +94,6 @@ public:
   virtual ~Ring();
 
   const CoefficientRingR *getCoefficientRingR() const;
-
-  ////////////////////////
-  // Ring informational //
-  ////////////////////////
-
   const Monoid *degree_monoid() const;
   const PolynomialRing *get_degree_ring() const { return degree_ring; }
   M2_arrayint get_heft_vector() const
@@ -106,13 +101,30 @@ public:
     return heft_vector;
   }  // This CAN BE NULL
 
+  // ---------------------------------------------------------------------------
+  //   Ring Traits
+  // ---------------------------------------------------------------------------
+
+  virtual bool has_trait(const M2::RingTrait trait) const
+  {
+    switch (trait)
+    {
+    case M2::RingTrait::BASIC_RING:
+    case M2::RingTrait::COMMUTATIVE:
+    case M2::RingTrait::GRADED:
+      return true;
+    default:
+      return false;
+    }
+  }
+  virtual M2::RingTypeId get_typeid() const { return M2::RingTypeId::RING; }
+
   virtual M2::RingID ringID() const { return M2::ring_old; }
   virtual bool is_basic_ring() const
   {
     return true;
   }  // The default is to be a basic ring.
   virtual bool isFinitePrimeField() const { return false; }
-  virtual bool isGaloisField() const { return false; }
   virtual bool is_ZZ() const { return false; }
   virtual bool is_QQ() const { return false; }
   virtual bool is_RRR() const { return false; }
@@ -176,19 +188,7 @@ public:
   ///////////////////////////////////
   // Casting up the ring hierarchy //
   ///////////////////////////////////
-  virtual bool has_trait(M2::RingTrait trait)
-  {
-    switch (trait)
-    {
-    case M2::RingTrait::IS_BASIC_RING:
-    case M2::RingTrait::IS_COMMUTATIVE:
-    case M2::RingTrait::IS_GRADED:
-      return true;
-    default:
-      return false;
-    }
-  }
-  virtual M2::RingTypeId get_typeid() { return M2::RingTypeId::RING; }
+
 
   virtual const Tower *cast_to_Tower() const { return 0; }
   virtual Tower *cast_to_Tower() { return 0; }
@@ -260,9 +260,10 @@ public:
 
   virtual void text_out(buffer &o) const = 0;
 
-  //////////////////////
-  // Ring arithmetic ///
-  //////////////////////
+  // ---------------------------------------------------------------------------
+  //   Ring Arithmetic
+  // ---------------------------------------------------------------------------
+
   virtual unsigned int computeHashValue(const ring_elem a) const = 0;
 
   virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const;

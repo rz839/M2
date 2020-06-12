@@ -49,10 +49,19 @@ class ConcreteRing : public Ring
            ringID() == ring_ZZpFlint;
   }
 
-  bool isGaloisField() const
+  bool has_trait(const RingTrait trait) const override
   {
-    return ringID() == ring_GF or ringID() == ring_GFGivaro or
-           ringID() == ring_GFFlintBig or ringID() == ring_GFFlintZech;
+    switch (trait)
+    {
+    case RingTrait::FINITE_PRIME_FIELD:
+      return ringID() == ring_ZZp or ringID() == ring_ZZpFfpack or
+             ringID() == ring_ZZpFlint;
+    case RingTrait::GALOIS_FIELD:
+      return ringID() == ring_GF or ringID() == ring_GFGivaro or
+             ringID() == ring_GFFlintBig or ringID() == ring_GFFlintZech;
+    default:
+      return Ring::has_trait(trait);
+    }
   }
 
   /////////////////////////////////////////

@@ -36,7 +36,12 @@ class GF : public Ring
   static GF *create(const RingElement *prim);
 
   int extension_degree() const { return Qexp_; }
-  virtual bool isGaloisField() const { return true; }
+
+  bool has_trait(const M2::RingTrait trait) const override
+  {
+    return trait == M2::RingTrait::GALOIS_FIELD or Ring::has_trait(trait);
+  }
+
   const RingElement *getMinimalPolynomial() const;
   // returns the polynomial f(t) mentioned in the def of _originalR above.
   // this is the minimal polynomial of the given generator of this ring

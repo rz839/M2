@@ -53,7 +53,7 @@ static enum factoryCoeffMode coeffMode(const PolynomialRing *P)
   if (F->is_QQ()) return modeQQ;
   if (dynamic_cast<const RingZZ*>(F)) return modeZZ;
   if (F->isFinitePrimeField()) return modeZn;
-  if (F->isGaloisField()) return modeGF;
+  if (F->has_trait(M2::RingTrait::GALOIS_FIELD)) return modeGF;
   ERROR("expected coefficient ring of the form ZZ/n, ZZ, QQ, or GF");
   return modeError;
 }
@@ -337,7 +337,7 @@ static CanonicalForm convertToFactory(const RingElement &g, bool inExtension);
 ////////////////////////////////////////////////////////////////////////
 static Variable set_GF_minimal_poly(const PolynomialRing *P)
 {
-  assert(P->getCoefficientRing()->isGaloisField());
+  assert(P->getCoefficientRing()->has_trait(M2::RingTrait::GALOIS_FIELD));
   const Ring *kk = P->getCoefficientRing();
   assert(kk != 0);
   RingElement F = RingElement(kk, kk->var(0));
@@ -351,7 +351,7 @@ static void getGFRepresentation(const Ring *kk1,
                                 const ring_elem &a,
                                 std::vector<long> &result_rep)
 {
-  assert(kk1->isGaloisField());
+  assert(kk1->has_trait(M2::RingTrait::GALOIS_FIELD));
   //  const GF* kk = kk1->cast_to_GF();
   //  assert(kk != 0);
   const RingElement *F = kk1->getRepresentation(a);
