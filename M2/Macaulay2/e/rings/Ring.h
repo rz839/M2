@@ -22,6 +22,12 @@ class RingBase : public virtual IRing,
 protected:
   const Derived* crtp() const { return static_cast<const Derived*>(this); }
 
+protected:
+  long m_char{0};
+
+public:
+  long characteristic() const { return m_char; }
+
 public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
 //  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }

@@ -55,12 +55,11 @@ class Ring : public RingBase<Ring>
 {
 public:
   using RingBase<Ring>::power;
+  using Base = RingBase<Ring>;
 
- protected:
+protected:
   const ARing *getARing() const { return AR; }
-  long mCharacteristic;  // not all rings will have characteristic that fits in
-                         // a long int
-  // int P;
+
   const PolynomialRing *degree_ring;
   M2_arrayint heft_vector;
   // This vector, if NULL, and if there are any variables in the ring imply that
@@ -90,7 +89,8 @@ public:
                        const PolynomialRing *DR = 0,
                        const M2_arrayint heft_vec = 0);
   Ring() : heft_vector(0) {}
- public:
+
+public:
   virtual ~Ring();
 
   const CoefficientRingR *getCoefficientRingR() const;
@@ -99,7 +99,6 @@ public:
   // Ring informational //
   ////////////////////////
 
-  long characteristic() const { return mCharacteristic; }
   const Monoid *degree_monoid() const;
   const PolynomialRing *get_degree_ring() const { return degree_ring; }
   M2_arrayint get_heft_vector() const

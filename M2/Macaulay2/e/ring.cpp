@@ -33,7 +33,7 @@ void Ring::initialize_ring(long P0,
   // Remember: if this is a poly ring, the ring is K[M].
   // If this is a basic routine, K = this, M = trivial monoid.
   // If this is a frac field, K = R, M = trivial monoid.
-  mCharacteristic = P0;
+  Base::m_char = P0;
   if (DR == 0)
     degree_ring = PolyRing::get_trivial_poly_ring();
   else
