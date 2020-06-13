@@ -29,6 +29,14 @@ protected:
   long m_char{0};
   const PolynomialRing *m_degree_ring;
 
+  M2_arrayint m_heft_vector{nullptr};
+  // This vector, if NULL, and if there are any variables in the ring imply that
+  // the heft vector should be taken as the default: the first degree should be
+  // used
+  // If non-NULL, this should dot to a positive value for every variable in the
+  // ring.
+  // Question: does this include coefficient variables in the ring?
+
   ring_elem m_zeroV;          /// zero element in the ring
   ring_elem m_oneV;
   ring_elem m_minus_oneV;
@@ -51,6 +59,11 @@ public:
   bool declare_field();  // if false is returned, then an ERROR has been set.
   ring_elem get_non_unit() const;
   void set_non_unit(ring_elem zero_div) const;
+
+  M2_arrayint get_heft_vector() const
+  {
+    return m_heft_vector;
+  }  // This CAN BE NULL
 
  public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }

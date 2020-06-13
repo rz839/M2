@@ -60,13 +60,6 @@ public:
 protected:
   const ARing *getARing() const { return AR; }
 
-  M2_arrayint heft_vector;
-  // This vector, if NULL, and if there are any variables in the ring imply that
-  // the heft vector should be taken as the default: the first degree should be
-  // used
-  // If non-NULL, this should dot to a positive value for every variable in the
-  // ring.
-  // Question: does this include coefficient variables in the ring?
 
   const ARing *AR;
   mutable const CoefficientRingR *cR;  // set to NULL.  If a ring does not have
@@ -75,19 +68,15 @@ protected:
   // then calling getCoefficientRingR() will set this, and return it.
 
   void initialize_ring(long charac,
-                       const PolynomialRing *DR = 0,
-                       const M2_arrayint heft_vec = 0);
-  Ring() : heft_vector(0) {}
+                       const PolynomialRing *DR = nullptr,
+                       const M2_arrayint heft_vec = nullptr);
+  Ring() = default;
 
 public:
   virtual ~Ring();
 
   const CoefficientRingR *getCoefficientRingR() const;
   const Monoid *degree_monoid() const;
-  M2_arrayint get_heft_vector() const
-  {
-    return heft_vector;
-  }  // This CAN BE NULL
 
   // ---------------------------------------------------------------------------
   //   Ring Traits
@@ -166,10 +155,9 @@ public:
   // There are only a few rings which do not have such divisors: frac rings
   //   over quotients of poly rings.
 
-  ///////////////////////////////////
-  // Casting up the ring hierarchy //
-  ///////////////////////////////////
-
+  // ---------------------------------------------------------------------------
+  //   Ring Down-casting
+  // ---------------------------------------------------------------------------
 
   virtual const Tower *cast_to_Tower() const { return 0; }
   virtual Tower *cast_to_Tower() { return 0; }
@@ -194,6 +182,10 @@ public:
   // Galois Field routines.  These three routines only return non-NULL values
   // if this was created as a Galois field, isom to A = kk[b]/(f(b)), kk = prime
   // field of char p.
+
+  // ---------------------------------------------------------------------------
+  //   Other Methods (used for specific rings)
+  // ---------------------------------------------------------------------------
 
   // Returns NULL if not a GF.  Returns f(b) in the ring kk[b].  (Variable name
   // might be different)
@@ -242,7 +234,7 @@ public:
   virtual void text_out(buffer &o) const = 0;
 
   // ---------------------------------------------------------------------------
-  //   Ring Arithmetic
+  //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
 
   virtual unsigned int computeHashValue(const ring_elem a) const = 0;
@@ -310,6 +302,7 @@ public:
   void add_to(ring_elem &f, ring_elem &g) const;
   void subtract_to(ring_elem &f, ring_elem &g) const;
   void mult_to(ring_elem &f, const ring_elem g) const;
+
   virtual ring_elem negate(const ring_elem f) const = 0;
   virtual ring_elem add(const ring_elem f, const ring_elem g) const = 0;
   virtual ring_elem subtract(const ring_elem f, const ring_elem g) const = 0;

@@ -38,7 +38,7 @@ void Ring::initialize_ring(long P0,
     Base::m_degree_ring = PolyRing::get_trivial_poly_ring();
   else
     Base::m_degree_ring = DR;
-  heft_vector = heft_vec;
+  Base::m_heft_vector = heft_vec;
 
   Base::m_zeroV = ZERO_RINGELEM;
   Base::m_oneV = ZERO_RINGELEM;
