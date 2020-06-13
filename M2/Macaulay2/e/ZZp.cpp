@@ -49,9 +49,9 @@ bool Z_mod::initialize_Z_mod(int p)
 
   _P1 = P - 1;
 
-  zeroV = from_long(0);
-  oneV = from_long(1);
-  minus_oneV = from_long(-1);
+  Base::m_zeroV = from_long(0);
+  Base::m_oneV = from_long(1);
+  Base::m_minus_oneV = from_long(-1);
 
   coeffR = new CoefficientRingZZp(P, _log_table, _exp_table);
   aringZZp = new M2::ARingZZp(P);  // WARNING: this uses that the primitive

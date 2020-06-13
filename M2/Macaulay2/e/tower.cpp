@@ -33,9 +33,9 @@ bool Tower::initialize(long charac0,
       delete[] exts;
     }
 
-  zeroV = from_long(0);
-  oneV = from_long(1);
-  minus_oneV = from_long(-1);
+  Base::m_zeroV = from_long(0);
+  Base::m_oneV = from_long(1);
+  Base::m_minus_oneV = from_long(-1);
 
   return true;
 }

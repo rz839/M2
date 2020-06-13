@@ -27,11 +27,21 @@ protected:
 
 protected:
   long m_char{0};
+  const PolynomialRing *m_degree_ring;
+
+  ring_elem m_zeroV;          /// zero element in the ring
+  ring_elem m_oneV;
+  ring_elem m_minus_oneV;
 
 public:
   long characteristic() const { return m_char; }
+  const PolynomialRing* get_degree_ring() const { return m_degree_ring; }
+  ring_elem one() const { return m_oneV; }
+  ring_elem minus_one() const { return m_minus_oneV; }
+  ring_elem zero() const { return m_zeroV; }
 
-public:
+
+ public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
 //  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }
   ring_elem invert(ring_elem f) const override { throw std::runtime_error("inverse not supported in this ring"); }

@@ -143,9 +143,9 @@ bool SchurRing2::initialize_SchurRing2()
 {
   initialize_ring(coefficientRing->characteristic());
 
-  zeroV = from_long(0);
-  oneV = from_long(1);
-  minus_oneV = from_long(-1);
+  Base::m_zeroV = from_long(0);
+  Base::m_oneV = from_long(1);
+  Base::m_minus_oneV = from_long(-1);
 
   SMinitialize(nvars, 0);
   return true;

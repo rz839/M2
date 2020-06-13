@@ -28,9 +28,9 @@ bool FractionField::initialize_frac(const PolyRingFlat *R)
 
   R_ = R;
 
-  zeroV = from_long(0);
-  oneV = from_long(1);
-  minus_oneV = from_long(-1);
+  Base::m_zeroV = from_long(0);
+  Base::m_oneV = from_long(1);
+  Base::m_minus_oneV = from_long(-1);
 
   use_gcd_simplify = !(R->n_quotients() > 0
                        || dynamic_cast<const FractionField *>(R->getCoefficients()) // disallowed in x-relem.cpp

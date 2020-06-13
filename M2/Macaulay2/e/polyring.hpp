@@ -33,6 +33,9 @@ class GBComputation;
 /**
  * \ingroup polynomialrings
  */
+
+static_assert(!RZ_CRTP, "something is off");
+
 class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRing>, Ring>
 {
   bool is_graded_;

@@ -9,7 +9,7 @@
 #include "freemod.hpp"
 #include "coeffrings.hpp"
 
-const Monoid *Ring::degree_monoid() const { return degree_ring->getMonoid(); }
+const Monoid *Ring::degree_monoid() const { return get_degree_ring()->getMonoid(); }
 #if 1
 RingZZ *makeIntegerRing() { return new RingZZ; }
 #endif
@@ -35,17 +35,17 @@ void Ring::initialize_ring(long P0,
   // If this is a frac field, K = R, M = trivial monoid.
   Base::m_char = P0;
   if (DR == 0)
-    degree_ring = PolyRing::get_trivial_poly_ring();
+    Base::m_degree_ring = PolyRing::get_trivial_poly_ring();
   else
-    degree_ring = DR;
+    Base::m_degree_ring = DR;
   heft_vector = heft_vec;
 
   _non_unit = ZERO_RINGELEM;
   _isfield = 0;
 
-  zeroV = ZERO_RINGELEM;
-  oneV = ZERO_RINGELEM;
-  minus_oneV = ZERO_RINGELEM;
+  Base::m_zeroV = ZERO_RINGELEM;
+  Base::m_oneV = ZERO_RINGELEM;
+  Base::m_minus_oneV = ZERO_RINGELEM;
 }
 
 Ring::~Ring() {}
@@ -95,7 +95,7 @@ void Ring::set_non_unit(ring_elem non_unit) const
 ring_elem Ring::var(int v) const
 {
   // The default behavior is to just return 0.
-  return zeroV;
+  return zero();
 }
 
 ring_elem Ring::power(const ring_elem gg, mpz_srcptr m) const

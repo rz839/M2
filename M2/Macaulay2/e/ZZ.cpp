@@ -19,11 +19,11 @@ bool RingZZ::initialize_ZZ(const PolynomialRing *deg_ring)
 {
   initialize_ring(0);
 
-  zeroV = from_long(0);
-  oneV = from_long(1);
-  minus_oneV = from_long(-1);
+  Base::m_degree_ring = deg_ring;
+  Base::m_zeroV = from_long(0);
+  Base::m_oneV = from_long(1);
+  Base::m_minus_oneV = from_long(-1);
 
-  degree_ring = deg_ring;
   coeffR = new M2::ARingZZGMP;
   return true;
 }

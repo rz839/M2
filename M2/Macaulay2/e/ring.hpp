@@ -60,7 +60,6 @@ public:
 protected:
   const ARing *getARing() const { return AR; }
 
-  const PolynomialRing *degree_ring;
   M2_arrayint heft_vector;
   // This vector, if NULL, and if there are any variables in the ring imply that
   // the heft vector should be taken as the default: the first degree should be
@@ -81,10 +80,6 @@ protected:
                  //    a non-zero non-unit.
                  // If a non unit is found, then _isfield is set to -1.
 
-  ring_elem zeroV;  // Three generally useful values in a ring.
-  ring_elem oneV;
-  ring_elem minus_oneV;
-
   void initialize_ring(long charac,
                        const PolynomialRing *DR = 0,
                        const M2_arrayint heft_vec = 0);
@@ -95,7 +90,6 @@ public:
 
   const CoefficientRingR *getCoefficientRingR() const;
   const Monoid *degree_monoid() const;
-  const PolynomialRing *get_degree_ring() const { return degree_ring; }
   M2_arrayint get_heft_vector() const
   {
     return heft_vector;
@@ -267,10 +261,7 @@ public:
   virtual unsigned int computeHashValue(const ring_elem a) const = 0;
 
   virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const;
-
-  ring_elem one() const { return oneV; }
-  ring_elem minus_one() const { return minus_oneV; }
-  ring_elem zero() const { return zeroV; }
+  
   virtual ring_elem from_long(long n) const = 0;
   virtual ring_elem from_int(mpz_srcptr n) const = 0;
 

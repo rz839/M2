@@ -27,6 +27,8 @@ extern "C" inline int mask_mpq_cmp_si(mpq_srcptr x, long int i, long int j)
 */
 class RingZZ : public std::conditional_t<RZ_CRTP, RingBase<RingZZ>, Ring>
 {
+//  using Base = public std::conditional_t<RZ_CRTP, RingBase<RingZZ>, Ring>;
+
   friend class M2::ARingZZGMP;
 
   mpz_ptr new_elem() const;
