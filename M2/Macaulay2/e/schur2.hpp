@@ -100,7 +100,7 @@ inline schur_poly::iterator schur_poly::end() const
   return iterator(*this, 1);
 }
 
-class SchurRing2 : public Ring
+class SchurRing2 : public std::conditional_t<RZ_CRTP, RingBase<SchurRing2>, Ring>
 {
  private:
   const Ring *coefficientRing;

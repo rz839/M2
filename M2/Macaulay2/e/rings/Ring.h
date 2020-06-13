@@ -5,6 +5,9 @@
 #pragma once
 
 #include "../ringelem.hpp"
+#include <type_traits>
+
+static constexpr bool RZ_CRTP = false;
 
 class IRing
 {

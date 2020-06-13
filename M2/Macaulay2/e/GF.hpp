@@ -7,7 +7,7 @@
 /**
     @ingroup rings
 */
-class GF : public Ring
+class GF : public std::conditional_t<RZ_CRTP, RingBase<GF>, Ring>
 {
   // int P; // this is defined in class Ring
   const PolynomialRing *_originalR;  // This should be the ring ((Z/p)[t])/f(t).

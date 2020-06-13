@@ -8,7 +8,7 @@ class RingMap;
 
 class DRing;
 
-class Tower : public Ring
+class Tower : public std::conditional_t<RZ_CRTP, RingBase<Tower>, Ring>
 {
   friend class TowerEvaluator;
   int level;

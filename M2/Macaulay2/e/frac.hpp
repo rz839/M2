@@ -11,7 +11,7 @@ struct frac_elem
   ring_elem denom;
 };
 
-class FractionField : public Ring
+class FractionField : public std::conditional_t<RZ_CRTP, RingBase<FractionField>, Ring>
 {
   const PolyRingFlat *R_;  // Base ring.  Assumed to be a domain.
   bool use_gcd_simplify;   // Use built in gcd only if this is frac(ZZ[xs]) or

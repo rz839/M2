@@ -15,7 +15,7 @@ struct local_elem
   ring_elem denom;
 };
 
-class LocalRing : public Ring
+class LocalRing : public std::conditional_t<RZ_CRTP, RingBase<LocalRing>, Ring>
 {
  private:
   const PolyRing *mRing;

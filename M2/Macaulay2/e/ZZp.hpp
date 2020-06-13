@@ -10,7 +10,7 @@ class ARingZZp;
 /**
     @ingroup rings
 */
-class Z_mod : public Ring
+class Z_mod : public std::conditional_t<RZ_CRTP, RingBase<Z_mod>, Ring>
 {
   // int P; // this is defined in class Ring
   int P;      // this class only allows char < 32767, so we stash characteristic
