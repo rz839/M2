@@ -8,6 +8,8 @@
 #include <type_traits>
 
 static constexpr bool RZ_CRTP = false;
+class ARing;
+class CoefficientRingR;
 
 class IRing
 {
@@ -48,7 +50,10 @@ protected:
   //    a non-zero non-unit.
   // If a non unit is found, then _isfield is set to -1.
 
-public:
+  const ARing *getARing() const { return m_AR; }
+  const ARing *m_AR;
+
+ public:
   long characteristic() const { return m_char; }
   const PolynomialRing* get_degree_ring() const { return m_degree_ring; }
   ring_elem one() const { return m_oneV; }

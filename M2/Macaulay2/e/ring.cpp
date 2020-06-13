@@ -20,12 +20,6 @@ ARingZZ* makeIntegerRing()
 }
 #endif
 
-const CoefficientRingR *Ring::getCoefficientRingR() const
-{
-  if (cR == 0) cR = new CoefficientRingR(this);
-  return cR;
-}
-
 void Ring::initialize_ring(long P0,
                            const PolynomialRing *DR,
                            const M2_arrayint heft_vec)

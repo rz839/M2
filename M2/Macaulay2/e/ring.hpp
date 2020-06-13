@@ -57,16 +57,15 @@ public:
   using RingBase<Ring>::power;
   using Base = RingBase<Ring>;
 
-protected:
-  const ARing *getARing() const { return AR; }
 
 
-  const ARing *AR;
+ private:
   mutable const CoefficientRingR *cR;  // set to NULL.  If a ring does not have
                                        // a better "ARing" or "coeffring"
                                        // implementation,
   // then calling getCoefficientRingR() will set this, and return it.
 
+ protected:
   void initialize_ring(long charac,
                        const PolynomialRing *DR = nullptr,
                        const M2_arrayint heft_vec = nullptr);
@@ -75,7 +74,6 @@ protected:
 public:
   virtual ~Ring();
 
-  const CoefficientRingR *getCoefficientRingR() const;
   const Monoid *degree_monoid() const;
 
   // ---------------------------------------------------------------------------
