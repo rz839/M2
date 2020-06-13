@@ -40,12 +40,12 @@ void Ring::initialize_ring(long P0,
     Base::m_degree_ring = DR;
   heft_vector = heft_vec;
 
-  _non_unit = ZERO_RINGELEM;
-  _isfield = 0;
-
   Base::m_zeroV = ZERO_RINGELEM;
   Base::m_oneV = ZERO_RINGELEM;
   Base::m_minus_oneV = ZERO_RINGELEM;
+
+  Base::m_non_unit = ZERO_RINGELEM;
+  Base::m_isfield = 0;
 }
 
 Ring::~Ring() {}
@@ -62,34 +62,6 @@ FreeModule *Ring::make_Schreyer_FreeModule() const
 FreeModule *Ring::make_FreeModule(int n) const
 {
   return new FreeModule(this, n, false);
-}
-
-bool Ring::is_field() const { return _isfield == 1; }
-bool Ring::declare_field()
-{
-  if (_isfield >= 0)
-    {
-      _isfield = 1;
-      return true;
-    }
-  else
-    {
-      ERROR("attempting to declare a ring with known non-units to be a field");
-      return false;
-    }
-}
-ring_elem Ring::get_non_unit() const
-{
-  if (_isfield >= 0) return zero();
-  return copy(_non_unit);
-}
-
-void Ring::set_non_unit(ring_elem non_unit) const
-{
-  if (_isfield == 1)  // i.e. declared to be a field
-    ERROR("a non unit was found in a ring declared to be a field");
-  const_cast<Ring *>(this)->_isfield = -1;
-  const_cast<Ring *>(this)->_non_unit = non_unit;
 }
 
 ring_elem Ring::var(int v) const

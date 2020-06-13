@@ -73,12 +73,6 @@ protected:
                                        // a better "ARing" or "coeffring"
                                        // implementation,
   // then calling getCoefficientRingR() will set this, and return it.
-  ring_elem _non_unit;
-  int _isfield;  // 1: means yes, or declared yes.
-                 // 0: means not declared to be so.
-                 // -1: means a non unit was found, and that _non_unit contains
-                 //    a non-zero non-unit.
-                 // If a non unit is found, then _isfield is set to -1.
 
   void initialize_ring(long charac,
                        const PolynomialRing *DR = 0,
@@ -161,13 +155,6 @@ public:
   // polynomial rings are graded
   // Weyl algebras can be graded or not
   // quotient polynomial rings can be graded or not.
-
-  bool is_field() const;
-  bool declare_field();  // if false is returned, then an ERROR has been set.
-
-  ring_elem get_non_unit() const;
-  void set_non_unit(
-      ring_elem zero_div) const;  // not really const: sets "_non_unit"
 
   typedef enum { COEFF_ZZ, COEFF_QQ, COEFF_BASIC } CoefficientType;
   virtual CoefficientType coefficient_type() const { return COEFF_BASIC; }
@@ -261,7 +248,7 @@ public:
   virtual unsigned int computeHashValue(const ring_elem a) const = 0;
 
   virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const;
-  
+
   virtual ring_elem from_long(long n) const = 0;
   virtual ring_elem from_int(mpz_srcptr n) const = 0;
 

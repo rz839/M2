@@ -33,6 +33,13 @@ protected:
   ring_elem m_oneV;
   ring_elem m_minus_oneV;
 
+  mutable ring_elem m_non_unit;
+  mutable int m_isfield;  // 1: means yes, or declared yes.
+  // 0: means not declared to be so.
+  // -1: means a non unit was found, and that _non_unit contains
+  //    a non-zero non-unit.
+  // If a non unit is found, then _isfield is set to -1.
+
 public:
   long characteristic() const { return m_char; }
   const PolynomialRing* get_degree_ring() const { return m_degree_ring; }
@@ -40,6 +47,10 @@ public:
   ring_elem minus_one() const { return m_minus_oneV; }
   ring_elem zero() const { return m_zeroV; }
 
+  bool is_field() const;
+  bool declare_field();  // if false is returned, then an ERROR has been set.
+  ring_elem get_non_unit() const;
+  void set_non_unit(ring_elem zero_div) const;
 
  public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
