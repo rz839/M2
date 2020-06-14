@@ -10,15 +10,7 @@
 #include "coeffrings.hpp"
 
 const Monoid *Ring::degree_monoid() const { return get_degree_ring()->getMonoid(); }
-#if 1
 RingZZ *makeIntegerRing() { return new RingZZ; }
-#endif
-#if 0
-ARingZZ* makeIntegerRing()
-{
-  return new M2::ConcreteRing<M2::ARingZZ>;
-}
-#endif
 
 void Ring::initialize_ring(long P0,
                            const PolynomialRing *DR,
@@ -42,7 +34,6 @@ void Ring::initialize_ring(long P0,
   Base::m_isfield = 0;
 }
 
-Ring::~Ring() {}
 FreeModule *Ring::make_FreeModule() const
 {
   return new FreeModule(this, 0, false);

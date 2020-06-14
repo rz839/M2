@@ -64,7 +64,7 @@ protected:
   Ring() = default;
 
 public:
-  virtual ~Ring();
+  virtual ~Ring() = default;
   const Monoid *degree_monoid() const;
 
   // ---------------------------------------------------------------------------
