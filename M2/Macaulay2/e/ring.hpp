@@ -65,7 +65,7 @@ protected:
 
 public:
   virtual ~Ring() = default;
-  const Monoid *degree_monoid() const;
+  const Monoid *impl_degree_monoid() const;
 
   // ---------------------------------------------------------------------------
   //   Ring Traits

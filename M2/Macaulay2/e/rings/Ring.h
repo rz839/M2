@@ -56,6 +56,7 @@ protected:
  public:
   long characteristic() const { return m_char; }
   const PolynomialRing* get_degree_ring() const { return m_degree_ring; }
+  const Monoid * degree_monoid() const;
   ring_elem one() const { return m_oneV; }
   ring_elem minus_one() const { return m_minus_oneV; }
   ring_elem zero() const { return m_zeroV; }
@@ -80,4 +81,4 @@ protected:
 // [[maybe_unused]] ring_elem impl_mult(ring_elem f, ring_elem g) const;
 };
 
-// #include "Ring.hpp"  // safe but confuses CLion
+#include "Ring.hpp"  // safe but confuses CLion

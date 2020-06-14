@@ -9,7 +9,7 @@
 #include "freemod.hpp"
 #include "coeffrings.hpp"
 
-const Monoid *Ring::degree_monoid() const { return get_degree_ring()->getMonoid(); }
+const Monoid *Ring::impl_degree_monoid() const { return get_degree_ring()->getMonoid(); }
 RingZZ *makeIntegerRing() { return new RingZZ; }
 
 void Ring::initialize_ring(long P0,
