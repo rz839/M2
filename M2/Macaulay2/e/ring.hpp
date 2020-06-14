@@ -57,15 +57,7 @@ public:
   using RingBase<Ring>::power;
   using Base = RingBase<Ring>;
 
-
-
- private:
-  mutable const CoefficientRingR *cR;  // set to NULL.  If a ring does not have
-                                       // a better "ARing" or "coeffring"
-                                       // implementation,
-  // then calling getCoefficientRingR() will set this, and return it.
-
- protected:
+protected:
   void initialize_ring(long charac,
                        const PolynomialRing *DR = nullptr,
                        const M2_arrayint heft_vec = nullptr);
@@ -73,13 +65,12 @@ public:
 
 public:
   virtual ~Ring();
-
   const Monoid *degree_monoid() const;
 
   // ---------------------------------------------------------------------------
   //   Ring Traits
   // ---------------------------------------------------------------------------
-
+public:
   virtual bool has_trait(const M2::RingTrait trait) const
   {
     switch (trait)
