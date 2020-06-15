@@ -185,13 +185,14 @@ public:
 
   virtual ring_elem var(int v) const = 0;
 
-#if 0
-  virtual ring_elem preferred_associate(ring_elem f) const;
-  // Returns an invertible element c of the same ring such that c*f is the
-  // preferred associate of the element f.
-  // WARNING: The default implementation is for a field.
+  /**
+   * Returns an invertible element c of the same ring such that c*f is the
+   * preferred associate of the element f.
+   * WARNING: The default implementation is for a field.
+   */
+  virtual ring_elem preferred_associate(ring_elem f) const = 0;
 
-  virtual bool lower_associate_divisor(ring_elem &f, ring_elem g) const;
+  /**
   // Replaces f with the unit c such that (fx+g)//c is the preferred associate
   //   of fx+g, in the ring A[x], where A is 'this'.
   // Returns false if f will never be changed after this
@@ -199,7 +200,20 @@ public:
   // filed if f != 0,
   // but over QQ will never happen)
   // WARNING: The default implementation is for a field.
+   */
+  virtual bool lower_associate_divisor(ring_elem &f, ring_elem g) const = 0;
 
+  /**
+   * content functions
+   */
+  virtual void lower_content(ring_elem &c, ring_elem g) const = 0;
+  virtual ring_elem content(ring_elem f) const = 0;
+  virtual ring_elem content(ring_elem f, ring_elem g) const = 0;
+  virtual ring_elem divide_by_given_content(ring_elem f, ring_elem c) const = 0;
+  virtual ring_elem divide_by_content(ring_elem f) const = 0;
+  virtual ring_elem split_off_content(ring_elem f, ring_elem &result) const = 0;
+
+#if 0
   virtual bool promote(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
   virtual bool lift(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
 
@@ -316,7 +330,7 @@ public:
 //  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }
   ring_elem invert(ring_elem f) const override { throw exc::engine_error("inverse not supported in this ring"); }
 
-  std::pair<bool, long> coerceToLongInteger(ring_elem a) const override;
+  std::pair<bool, long> coerceToLongInteger(ring_elem a) const override { return {}; }
   ring_elem from_long(long n) const override { return crtp()->template not_impl<ring_elem>(); }
   ring_elem from_int(mpz_srcptr n) const override { return crtp()->template not_impl<ring_elem>(); }
 
@@ -327,6 +341,17 @@ public:
   bool from_complex_double(double re, double im, ring_elem &result) const override { result=from_long(0); return false; }
 
   ring_elem var(int v) const override { return zero(); }
+
+  ring_elem preferred_associate(ring_elem f) const override;
+  bool lower_associate_divisor(ring_elem &f, ring_elem g) const override;
+
+  void lower_content(ring_elem &c, ring_elem g) const override;
+  ring_elem content(ring_elem f) const override;
+  ring_elem content(ring_elem f, ring_elem g) const override;
+  ring_elem divide_by_given_content(ring_elem f, ring_elem c) const override;
+  ring_elem divide_by_content(ring_elem f) const override;
+  ring_elem split_off_content(ring_elem f, ring_elem &result) const override;
+
 
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;

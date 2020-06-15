@@ -163,65 +163,6 @@ ring_elem Ring::remainderAndQuotient(const ring_elem f,
   return zero();
 }
 
-ring_elem Ring::preferred_associate(ring_elem f) const
-{
-  // Here we assume that 'this' is a field:
-  if (is_zero(f)) return from_long(1);
-  return invert(f);
-}
-
-bool Ring::lower_associate_divisor(ring_elem &f, const ring_elem g) const
-// Implementation for a basic ring
-{
-  if (is_zero(f))
-    {
-      f = g;
-      return !is_zero(f);
-    }
-  return true;
-}
-
-void Ring::lower_content(ring_elem &result, ring_elem g) const
-// default implementation
-{
-  // The default implementation here ASSUMES that result and g are in the same
-  // ring!
-  if (is_zero(result)) result = g;
-}
-
-ring_elem Ring::content(ring_elem f) const
-// default implementation
-{
-  return f;
-}
-
-ring_elem Ring::content(ring_elem f, ring_elem g) const
-// default implementation
-{
-  lower_content(f, g);
-  return f;
-}
-
-ring_elem Ring::divide_by_given_content(ring_elem f, ring_elem c) const
-// default implementation
-{
-  // The default implementation here ASSUMES that f and c are in the same ring!
-  return divide(f, c);
-}
-
-ring_elem Ring::divide_by_content(ring_elem f) const
-{
-  ring_elem c = content(f);
-  return divide_by_given_content(f, c);
-}
-
-ring_elem Ring::split_off_content(ring_elem f, ring_elem &result) const
-{
-  ring_elem c = content(f);
-  result = divide_by_given_content(f, c);
-  return c;
-}
-
 void Ring::monomial_divisor(const ring_elem a, int *exp) const
 {
   // Do nothing

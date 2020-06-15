@@ -87,7 +87,68 @@ void RingBase<D>::set_non_unit(ring_elem non_unit) const
 //}
 
 template <typename D>
-std::pair<bool, long> RingBase<D>::coerceToLongInteger(ring_elem a) const
+ring_elem RingBase<D>::preferred_associate(ring_elem f) const
 {
-  return {};
+  // Here we assume that 'this' is a field:
+  if (crtp()->is_zero(f))
+    return crtp()->from_long(1);
+  return crtp()->invert(f);
+}
+
+template <typename D>
+bool RingBase<D>::lower_associate_divisor(ring_elem &f, const ring_elem g) const
+{
+  if (crtp()->is_zero(f))
+  {
+    f = g;
+    return !crtp()->is_zero(f);
+  }
+  return true;
+}
+
+template <typename D>
+void RingBase<D>::lower_content(ring_elem &result, ring_elem g) const
+{
+  // default implementation
+  // The default implementation here ASSUMES that result and g are in the same
+  // ring!
+  if (crtp()->is_zero(result)) result = g;
+}
+
+template <typename D>
+ring_elem RingBase<D>::content(ring_elem f) const
+// default implementation
+{
+  return f;
+}
+
+template <typename D>
+ring_elem RingBase<D>::content(ring_elem f, ring_elem g) const
+// default implementation
+{
+  lower_content(f, g);
+  return f;
+}
+
+template <typename D>
+ring_elem RingBase<D>::divide_by_given_content(ring_elem f, ring_elem c) const
+// default implementation
+{
+  // The default implementation here ASSUMES that f and c are in the same ring!
+  return crtp()->divide(f, c);
+}
+
+template <typename D>
+ring_elem RingBase<D>::divide_by_content(ring_elem f) const
+{
+  ring_elem c = content(f);
+  return divide_by_given_content(f, c);
+}
+
+template <typename D>
+ring_elem RingBase<D>::split_off_content(ring_elem f, ring_elem &result) const
+{
+  ring_elem c = content(f);
+  result = divide_by_given_content(f, c);
+  return c;
 }
