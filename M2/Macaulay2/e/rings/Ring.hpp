@@ -85,3 +85,9 @@ void RingBase<D>::set_non_unit(ring_elem non_unit) const
 //{
 //  return 0;
 //}
+
+template <typename D>
+std::pair<bool, long> RingBase<D>::coerceToLongInteger(ring_elem a) const
+{
+  return {};
+}

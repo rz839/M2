@@ -166,6 +166,96 @@ public:
   virtual ring_elem power(ring_elem f, int n) const = 0;
 //  virtual ring_elem mult(ring_elem f, ring_elem g) const = 0;
   virtual ring_elem invert(ring_elem f) const = 0;
+
+  virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const = 0;
+
+  virtual ring_elem from_long(long n) const = 0;
+  virtual ring_elem from_int(mpz_srcptr n) const = 0;
+
+  /**
+   * The next batch of functions perform element conversions.
+   * If successful, true is returned and `result` holds the value;
+   * otherwise, false is returned and `result` is unchanged.
+   */
+  virtual bool from_rational(const mpq_srcptr q, ring_elem &result) const = 0;
+  virtual bool from_BigReal(gmp_RR a, ring_elem &result) const = 0;
+  virtual bool from_BigComplex(gmp_CC z, ring_elem &result) const = 0;
+  virtual bool from_double(double a, ring_elem &result) const = 0;
+  virtual bool from_complex_double(double re, double im, ring_elem &result) const = 0;
+
+  virtual ring_elem var(int v) const = 0;
+
+#if 0
+  virtual ring_elem preferred_associate(ring_elem f) const;
+  // Returns an invertible element c of the same ring such that c*f is the
+  // preferred associate of the element f.
+  // WARNING: The default implementation is for a field.
+
+  virtual bool lower_associate_divisor(ring_elem &f, ring_elem g) const;
+  // Replaces f with the unit c such that (fx+g)//c is the preferred associate
+  //   of fx+g, in the ring A[x], where A is 'this'.
+  // Returns false if f will never be changed after this
+  // (This happens over ZZ if f is non-zero (therefore 1 or -1, over a finite
+  // filed if f != 0,
+  // but over QQ will never happen)
+  // WARNING: The default implementation is for a field.
+
+  virtual bool promote(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
+  virtual bool lift(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
+
+  virtual bool is_unit(const ring_elem f) const = 0;
+  virtual bool is_zero(const ring_elem f) const = 0;
+
+  virtual bool is_equal(const ring_elem f, const ring_elem g) const = 0;
+  virtual int compare_elems(const ring_elem f, const ring_elem g) const = 0;  /// {-1,0,1} for f<=>g, resp.
+
+  virtual ring_elem copy(const ring_elem f) const = 0;
+  virtual void remove(ring_elem &f) const = 0;
+
+  virtual ring_elem negate(const ring_elem f) const = 0;
+  virtual ring_elem add(const ring_elem f, const ring_elem g) const = 0;
+  virtual ring_elem subtract(const ring_elem f, const ring_elem g) const = 0;
+  virtual ring_elem mult(const ring_elem f, const ring_elem g) const = 0;
+
+  virtual void negate_to(ring_elem &f) const;
+  virtual void add_to(ring_elem &f, ring_elem &g) const;
+  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
+  virtual void mult_to(ring_elem &f, const ring_elem g) const;
+
+  virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
+//  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
+  // These two power routines can be used for n >= 0.
+
+//  virtual ring_elem invert(const ring_elem f) const = 0;  // TODO(RZ): remove - crtp'ed
+  virtual ring_elem divide(const ring_elem f, const ring_elem g) const = 0;
+
+  virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
+  virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
+  virtual ring_elem remainderAndQuotient(const ring_elem f,
+                                         const ring_elem g,
+                                         ring_elem &quot) const;
+  // The default version is for a field:
+  //   f % 0 is f, otherwise f % g is 0.
+  //   f // 0 is 0, otherwise f // g is f/g
+  // These three routines: remainder, quotient and remainderAndQuotient
+  // satisfy these properties:
+  // If r = remainder(f,g), q = quotient(f,g), then
+  // (1) f = q*g + r
+  // (2) If f is in ideal(g), then r = 0.
+  // (3) If g is invertible, then r = 0, and q = f * g^(-1).
+  // (4) If the ring is ZZ, then the remainder is "balanced": -[g/2] < r <=
+  // [g/2]
+  // remainderAndQuotient combines remainder and quotient into one routine.
+
+  virtual void syzygy(const ring_elem a,
+                      const ring_elem b,
+                      ring_elem &x,
+                      ring_elem &y) const = 0;
+  // Constructs elements x and y in the ring s.t. ax + by = 0.  This syzygy is
+  // chosen as simply as possible.  For example, over QQ, x is chosen
+  // to be positive.  The routine must handle the case when a=0, but can
+  // ignore the case when b=0... (Really?)
+#endif
 };
 
 template <typename Derived>
@@ -174,6 +264,11 @@ class RingBase : public virtual IRing,
 {
 protected:
   const Derived* crtp() const { return static_cast<const Derived*>(this); }
+  template <typename ReturnT>
+  auto not_impl() const -> ReturnT
+  {
+    throw exc::engine_error("crtp method not implemented at this level");
+  }
 
 protected:
   long m_char{0};
@@ -222,7 +317,19 @@ protected:
  public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
 //  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }
-  ring_elem invert(ring_elem f) const override { throw std::runtime_error("inverse not supported in this ring"); }
+  ring_elem invert(ring_elem f) const override { throw exc::engine_error("inverse not supported in this ring"); }
+
+  std::pair<bool, long> coerceToLongInteger(ring_elem a) const override;
+  ring_elem from_long(long n) const override { return crtp()->template not_impl<ring_elem>(); }
+  ring_elem from_int(mpz_srcptr n) const override { return crtp()->template not_impl<ring_elem>(); }
+
+  bool from_rational(const mpq_srcptr q, ring_elem &result) const override { return crtp()->template not_impl<bool>(); }
+  bool from_BigReal(gmp_RR a, ring_elem &result) const override { result=from_long(0); return false; }
+  bool from_BigComplex(gmp_CC z, ring_elem &result) const override { result=from_long(0); return false; }
+  bool from_double(double a, ring_elem &result) const override { result=from_long(0); return false; }
+  bool from_complex_double(double re, double im, ring_elem &result) const override { result=from_long(0); return false; }
+
+  ring_elem var(int v) const override { return zero(); }
 
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;

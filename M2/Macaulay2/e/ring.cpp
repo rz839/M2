@@ -50,12 +50,6 @@ FreeModule *Ring::make_FreeModule(int n) const
   return new FreeModule(this, n, false);
 }
 
-ring_elem Ring::var(int v) const
-{
-  // The default behavior is to just return 0.
-  return zero();
-}
-
 ring_elem Ring::power(const ring_elem gg, mpz_srcptr m) const
 {
   ring_elem ff = gg;
@@ -167,34 +161,6 @@ ring_elem Ring::remainderAndQuotient(const ring_elem f,
     }
   quot = divide(f, g);
   return zero();
-}
-
-std::pair<bool, long> Ring::coerceToLongInteger(ring_elem a) const
-{
-  return std::pair<bool, long>(false,
-                               0);  // the default is that it cannot be lifted.
-}
-
-bool Ring::from_BigComplex(gmp_CC z, ring_elem &result) const
-{
-  result = from_long(0);
-  return false;
-}
-
-bool Ring::from_BigReal(gmp_RR z, ring_elem &result) const
-{
-  result = from_long(0);
-  return false;
-}
-bool Ring::from_double(double a, ring_elem &result) const
-{
-  result = from_long(0);
-  return false;
-}
-bool Ring::from_complex_double(double re, double im, ring_elem &result) const
-{
-  result = from_long(0);
-  return false;
 }
 
 ring_elem Ring::preferred_associate(ring_elem f) const

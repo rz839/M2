@@ -87,30 +87,6 @@ public:
   // ---------------------------------------------------------------------------
   //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
-  virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const;
-
-  virtual ring_elem from_long(long n) const = 0;
-  virtual ring_elem from_int(mpz_srcptr n) const = 0;
-
-  // from_rational: if the rational q cannot be placed into this ring, false is
-  // returned, and result is not touched.
-  virtual bool from_rational(const mpq_srcptr q, ring_elem &result) const = 0;
-
-  // The default version calls from_long(0) and returns false.
-  virtual bool from_BigReal(gmp_RR a, ring_elem &result) const;
-  // The default version calls from_long(0) and returns false.
-  virtual bool from_BigComplex(gmp_CC z, ring_elem &result) const;
-  // Returns false if this ring cannot coerce a double to an element in this
-  // ring
-  virtual bool from_double(double a, ring_elem &result) const;
-  // Returns false if this ring cannot coerce a complex double (re+im*ii) to an
-  // element in this ring
-  virtual bool from_complex_double(double re,
-                                   double im,
-                                   ring_elem &result) const;
-
-  virtual ring_elem var(int v) const;
-
   virtual ring_elem preferred_associate(ring_elem f) const;
   // Returns an invertible element c of the same ring such that c*f is the
   // preferred associate of the element f.
@@ -125,36 +101,27 @@ public:
   // but over QQ will never happen)
   // WARNING: The default implementation is for a field.
 
-  virtual bool promote(const Ring *R,
-                       const ring_elem f,
-                       ring_elem &result) const = 0;
-  virtual bool lift(const Ring *R,
-                    const ring_elem f,
-                    ring_elem &result) const = 0;
+  virtual bool promote(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
+  virtual bool lift(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
 
   virtual bool is_unit(const ring_elem f) const = 0;
   virtual bool is_zero(const ring_elem f) const = 0;
-  virtual bool is_equal(const ring_elem f, const ring_elem g) const = 0;
 
-  virtual int compare_elems(const ring_elem f, const ring_elem g) const = 0;
-  // Returns -1 if f < g, 0 if f and g are either equal, or considered equal,
-  // and 1 if f > g.
-  // The specific definition is ring dependent, but for numeric rings it
-  // defaults to
-  // the standard order.
+  virtual bool is_equal(const ring_elem f, const ring_elem g) const = 0;
+  virtual int compare_elems(const ring_elem f, const ring_elem g) const = 0;  /// {-1,0,1} for f<=>g, resp.
 
   virtual ring_elem copy(const ring_elem f) const = 0;
   virtual void remove(ring_elem &f) const = 0;
-
-  virtual void negate_to(ring_elem &f) const;
-  virtual void add_to(ring_elem &f, ring_elem &g) const;
-  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
-  virtual void mult_to(ring_elem &f, const ring_elem g) const;
 
   virtual ring_elem negate(const ring_elem f) const = 0;
   virtual ring_elem add(const ring_elem f, const ring_elem g) const = 0;
   virtual ring_elem subtract(const ring_elem f, const ring_elem g) const = 0;
   virtual ring_elem mult(const ring_elem f, const ring_elem g) const = 0;
+
+  virtual void negate_to(ring_elem &f) const;
+  virtual void add_to(ring_elem &f, ring_elem &g) const;
+  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
+  virtual void mult_to(ring_elem &f, const ring_elem g) const;
 
   virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
 //  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
@@ -189,6 +156,9 @@ public:
   // chosen as simply as possible.  For example, over QQ, x is chosen
   // to be positive.  The routine must handle the case when a=0, but can
   // ignore the case when b=0... (Really?)
+
+
+
 
   virtual ring_elem random() const
   {
