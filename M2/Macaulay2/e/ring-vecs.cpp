@@ -77,21 +77,6 @@ void Ring::remove_vec(vec v) const
 // Routines which do not modify vecs //
 ///////////////////////////////////////
 
-bool Ring::is_equal(const vecterm *a, const vecterm *b) const
-{
-  for (;; a = a->next, b = b->next)
-    {
-      if (a == NULL)
-        {
-          if (b == NULL) return true;
-          return false;
-        }
-      if (b == NULL) return false;
-      if (a->comp != b->comp) return false;
-      if (!this->is_equal(a->coeff, b->coeff)) return false;
-    }
-}
-
 int Ring::compare_vecs(vec v, vec w) const
 {
   for (;; v = v->next, w = w->next)

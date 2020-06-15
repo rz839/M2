@@ -98,25 +98,25 @@ public:
    *  DOWN-CASTING - to be removed
    ****************************************************************************/
 
-  virtual const Tower *cast_to_Tower() const { return 0; }
-  virtual Tower *cast_to_Tower() { return 0; }
-  virtual const PolynomialRing *cast_to_PolynomialRing() const { return 0; }
-  virtual PolynomialRing *cast_to_PolynomialRing() { return 0; }
-  virtual const PolyRing *cast_to_PolyRing() const { return 0; }
-  virtual PolyRing *cast_to_PolyRing() { return 0; }
-  virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return 0; }
-  virtual PolyRingFlat *cast_to_PolyRingFlat() { return 0; }
+  virtual const Tower *cast_to_Tower() const { return nullptr; }
+  virtual Tower *cast_to_Tower() { return nullptr; }
+  virtual const PolynomialRing *cast_to_PolynomialRing() const { return nullptr; }
+  virtual PolynomialRing *cast_to_PolynomialRing() { return nullptr; }
+  virtual const PolyRing *cast_to_PolyRing() const { return nullptr; }
+  virtual PolyRing *cast_to_PolyRing() { return nullptr; }
+  virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return nullptr; }
+  virtual PolyRingFlat *cast_to_PolyRingFlat() { return nullptr; }
 
-  virtual const SchurRing *cast_to_SchurRing() const { return 0; }
-  virtual SchurRing *cast_to_SchurRing() { return 0; }
-  virtual const SolvableAlgebra *cast_to_SolvableAlgebra() const { return 0; }
-  virtual SolvableAlgebra *cast_to_SolvableAlgebra() { return 0; }
-  virtual const WeylAlgebra *cast_to_WeylAlgebra() const { return 0; }
+  virtual const SchurRing *cast_to_SchurRing() const { return nullptr; }
+  virtual SchurRing *cast_to_SchurRing() { return nullptr; }
+  virtual const SolvableAlgebra *cast_to_SolvableAlgebra() const { return nullptr; }
+  virtual SolvableAlgebra *cast_to_SolvableAlgebra() { return nullptr; }
+  virtual const WeylAlgebra *cast_to_WeylAlgebra() const { return nullptr; }
 
-  virtual RRR *cast_to_RRR() { return 0; }
-  virtual const RRR *cast_to_RRR() const { return 0; }
-  virtual CCC *cast_to_CCC() { return 0; }
-  virtual const CCC *cast_to_CCC() const { return 0; }
+  virtual RRR *cast_to_RRR() { return nullptr; }
+  virtual const RRR *cast_to_RRR() const { return nullptr; }
+  virtual CCC *cast_to_CCC() { return nullptr; }
+  virtual const CCC *cast_to_CCC() const { return nullptr; }
 
 /*******************************************************************************
  *   OTHER
@@ -213,7 +213,6 @@ public:
   virtual ring_elem divide_by_content(ring_elem f) const = 0;
   virtual ring_elem split_off_content(ring_elem f, ring_elem &result) const = 0;
 
-#if 0
   virtual bool promote(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
   virtual bool lift(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
 
@@ -221,6 +220,7 @@ public:
   virtual bool is_zero(const ring_elem f) const = 0;
 
   virtual bool is_equal(const ring_elem f, const ring_elem g) const = 0;
+  virtual bool is_equal(const vecterm *a, const vecterm *b) const = 0;
   virtual int compare_elems(const ring_elem f, const ring_elem g) const = 0;  /// {-1,0,1} for f<=>g, resp.
 
   virtual ring_elem copy(const ring_elem f) const = 0;
@@ -231,11 +231,12 @@ public:
   virtual ring_elem subtract(const ring_elem f, const ring_elem g) const = 0;
   virtual ring_elem mult(const ring_elem f, const ring_elem g) const = 0;
 
-  virtual void negate_to(ring_elem &f) const;
-  virtual void add_to(ring_elem &f, ring_elem &g) const;
-  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
-  virtual void mult_to(ring_elem &f, const ring_elem g) const;
+  virtual void negate_to(ring_elem &f) const = 0;
+  virtual void add_to(ring_elem &f, ring_elem &g) const = 0;
+  virtual void subtract_to(ring_elem &f, ring_elem &g) const = 0;
+  virtual void mult_to(ring_elem &f, const ring_elem g) const = 0;
 
+#if 0
   virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
 //  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
   // These two power routines can be used for n >= 0.
@@ -352,6 +353,28 @@ public:
   ring_elem divide_by_content(ring_elem f) const override;
   ring_elem split_off_content(ring_elem f, ring_elem &result) const override;
 
+  bool promote(const Ring *R, const ring_elem f, ring_elem &result) const override { return crtp()->template not_impl<bool>(); }
+  bool lift(const Ring *R, const ring_elem f, ring_elem &result) const override { return crtp()->template not_impl<bool>(); }
+
+  bool is_unit(const ring_elem f) const override { return crtp()->template not_impl<bool>(); }
+  bool is_zero(const ring_elem f) const override { return crtp()->template not_impl<bool>(); }
+
+  bool is_equal(const ring_elem f, const ring_elem g) const override { return crtp()->template not_impl<bool>(); }
+  bool is_equal(const vecterm *a, const vecterm *b) const override;
+  int compare_elems(const ring_elem f, const ring_elem g) const override { return crtp()->template not_impl<bool>(); }
+
+  ring_elem copy(const ring_elem f) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+  void remove(ring_elem &f) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+
+  ring_elem negate(const ring_elem f) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+  ring_elem add(const ring_elem f, const ring_elem g) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+  ring_elem subtract(const ring_elem f, const ring_elem g) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+  ring_elem mult(const ring_elem f, const ring_elem g) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+
+  void negate_to(ring_elem &f) const override { f=crtp()->negate(f); }
+  void add_to(ring_elem &f, ring_elem &g) const override { f=crtp()->add(f,g); }
+  void subtract_to(ring_elem &f, ring_elem &g) const override { f=crtp()->subtract(f,g); }
+  void mult_to(ring_elem &f, const ring_elem g) const override { f=crtp()->mult(f,g); }
 
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;

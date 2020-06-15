@@ -152,3 +152,15 @@ ring_elem RingBase<D>::split_off_content(ring_elem f, ring_elem &result) const
   result = divide_by_given_content(f, c);
   return c;
 }
+
+template <typename D>
+bool RingBase<D>::is_equal(const vecterm *a, const vecterm *b) const
+{
+  for (;; a = a->next, b = b->next)
+  {
+    if (!a) return b == nullptr;
+    if (!b) return false;
+    if (a->comp != b->comp) return false;
+    if (!this->is_equal(a->coeff, b->coeff)) return false;
+  }
+}

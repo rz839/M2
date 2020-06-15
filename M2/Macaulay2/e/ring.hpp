@@ -88,28 +88,6 @@ public:
   //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
 
-  virtual bool promote(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
-  virtual bool lift(const Ring *R, const ring_elem f, ring_elem &result) const = 0;
-
-  virtual bool is_unit(const ring_elem f) const = 0;
-  virtual bool is_zero(const ring_elem f) const = 0;
-
-  virtual bool is_equal(const ring_elem f, const ring_elem g) const = 0;
-  virtual int compare_elems(const ring_elem f, const ring_elem g) const = 0;  /// {-1,0,1} for f<=>g, resp.
-
-  virtual ring_elem copy(const ring_elem f) const = 0;
-  virtual void remove(ring_elem &f) const = 0;
-
-  virtual ring_elem negate(const ring_elem f) const = 0;
-  virtual ring_elem add(const ring_elem f, const ring_elem g) const = 0;
-  virtual ring_elem subtract(const ring_elem f, const ring_elem g) const = 0;
-  virtual ring_elem mult(const ring_elem f, const ring_elem g) const = 0;
-
-  virtual void negate_to(ring_elem &f) const;
-  virtual void add_to(ring_elem &f, ring_elem &g) const;
-  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
-  virtual void mult_to(ring_elem &f, const ring_elem g) const;
-
   virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
 //  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
   // These two power routines can be used for n >= 0.
@@ -242,7 +220,6 @@ public:
   vec copy_vec(const vecterm *v) const;
   void remove_vec(vec v) const;
 
-  bool is_equal(const vecterm *a, const vecterm *b) const;
   bool get_entry(const vecterm *v, int r, ring_elem &result) const;
   ring_elem get_entry(vec v, int r) const;
   vec sub_vector(const vecterm *v, M2_arrayint r) const;
