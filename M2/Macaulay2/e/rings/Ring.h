@@ -309,12 +309,9 @@ protected:
   ring_elem get_non_unit() const;
   void set_non_unit(ring_elem zero_div) const;
 
-  M2_arrayint get_heft_vector() const
-  {
-    return m_heft_vector;
-  }  // This CAN BE NULL
+  M2_arrayint get_heft_vector() const { return m_heft_vector; }  // can be NULL
 
- public:
+public:
   ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
 //  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }
   ring_elem invert(ring_elem f) const override { throw exc::engine_error("inverse not supported in this ring"); }
