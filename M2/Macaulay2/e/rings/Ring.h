@@ -79,6 +79,13 @@ protected:
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;
 // [[maybe_unused]] ring_elem impl_mult(ring_elem f, ring_elem g) const;
+
+  /** @name Vector Methods *****************************************************
+   *
+   * These are methods for vector operations. Move to an adaptor or a decorator
+   * class later.
+   */
+  vec new_vec() const { return new vecterm; }
 };
 
 #include "Ring.hpp"  // safe but confuses CLion

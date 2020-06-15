@@ -11,7 +11,6 @@
 //  and
 // the fact that one cannot change is used throughout.
 
-vec Ring::new_vec() const { return new vecterm; }
 void Ring::remove_vec_node(vec n) const
 {
   deleteitem(n);

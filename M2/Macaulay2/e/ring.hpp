@@ -407,7 +407,7 @@ public:
   // These routines are implemented in ring-vec.cpp
   //////////////////////////////////////////
  protected:
-  vec new_vec() const;
+//  vec new_vec() const;
   void remove_vec_node(vec n) const;
 
  public:

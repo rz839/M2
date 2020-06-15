@@ -79,3 +79,9 @@ void RingBase<D>::set_non_unit(ring_elem non_unit) const
   m_isfield = -1;
   m_non_unit = non_unit;
 }
+
+//template <typename D>
+//vec RingBase<D>::new_vec() const
+//{
+//  return 0;
+//}
