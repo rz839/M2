@@ -5,7 +5,9 @@
 #pragma once
 
 #include "../ringelem.hpp"
+#include "RingEnum.h"
 #include <type_traits>
+#include <exception>
 
 static constexpr bool RZ_CRTP = false;
 class ARing;
@@ -13,8 +15,95 @@ class CoefficientRingR;
 
 class IRing
 {
-  /* arithmetic
-   */
+/*******************************************************************************
+ *   TRAITS
+ ******************************************************************************/
+public:
+  virtual bool has_trait(const M2::RingTrait trait) const
+  {
+    switch (trait)
+      {
+        case M2::RingTrait::BASIC_RING:
+        case M2::RingTrait::COMMUTATIVE:
+        case M2::RingTrait::GRADED:
+          return true;
+        default:
+          return false;
+      }
+  }
+  virtual M2::RingTypeId get_typeid() const { return M2::RingTypeId::RING; }
+
+  virtual M2::RingID ringID() const { return M2::ring_old; }
+  virtual bool is_basic_ring() const
+  {
+    return true;
+  }  // The default is to be a basic ring.
+  virtual bool isFinitePrimeField() const { return false; }
+  virtual bool is_ZZ() const { return false; }
+  virtual bool is_QQ() const { return false; }
+  virtual bool is_RRR() const { return false; }
+  virtual bool is_CCC() const { return false; }
+  virtual bool is_fraction_field() const { return false; }
+  virtual bool is_fraction_poly_ring() const { return false; }
+  // returns true if this ring has fractions.  This includes
+  // polynomial rings over QQ, polynomial rings over fraction fields,
+  // fraction rings, and localizations.
+  // If this returns true, then 'get_denominator_ring()' returns non-NULL value.
+  //
+
+  virtual bool is_poly_ring() const { return false; }
+  // Returns true if this is a polynomial ring, possibly with fractions
+  // and possibly with quotient ideal, and possibly with non-commutative
+  // multiplication.  Equivalent to (cast_to_PolynomialRing() != 0).
+
+  virtual bool is_commutative_ring() const { return true; }
+  // Returns true iff this is a commutative ring.
+
+  virtual bool is_quotient_ring() const { return false; }
+  // Returns true if this is a polynomial ring, (possibly with fractions),
+  // with a quotient ideal.  This could be a non-commutative ring
+  // with skew-commutative, Weyl algebra, or other multiplication.
+
+  virtual bool is_weyl_algebra() const { return false; }
+  // Returns true if this is a polynomial ring (possibly with quotient)
+  // (possibly with ZZ fractions, or other commutative fractions)
+  // but with Weyl algebra multiplication on some of the variables.
+
+  virtual bool is_skew_commutative_ring() const { return false; }
+  // Returns true if this is a polynomial ring (possibly with quotient)
+  // (possibly with ZZ fractions, or other commutative fractions)
+  // but with some variables anti-commuting.
+
+  virtual bool is_solvable_algebra() const { return false; }
+  virtual bool is_graded() const { return true; }
+  // Is this ring graded, with the given grading?
+  // ZZ, QQ, ZZ/p, GF, RR, ... are all graded.
+  // polynomial rings are graded
+  // Weyl algebras can be graded or not
+  // quotient polynomial rings can be graded or not.
+
+  typedef enum { COEFF_ZZ, COEFF_QQ, COEFF_BASIC } CoefficientType;
+  virtual CoefficientType coefficient_type() const { return COEFF_BASIC; }
+  // What the ultimate coefficient type is.  ZZ, QQ, finite fields return these
+  // three values.  Fraction fields return their ultimate value, as do poly
+  // rings.
+
+  virtual bool has_associate_divisors() const { return true; }
+  // There are only a few rings which do not have such divisors: frac rings
+  //   over quotients of poly rings.
+
+/*******************************************************************************
+ *   ARITHMETIC
+ ******************************************************************************/
+
+  // For some finite fields, if a = (getGenerator())^r, return r.
+  // If it is not implemented for this ring, an exception is thrown
+  // If a is zero, then r is set to -1.
+  virtual long discreteLog(const ring_elem &a) const
+  {
+    throw exc::engine_error("cannot compute discrete logarithm in this ring");
+  }
+public:
   virtual ring_elem power(ring_elem f, int n) const = 0;
 //  virtual ring_elem mult(ring_elem f, ring_elem g) const = 0;
   virtual ring_elem invert(ring_elem f) const = 0;
