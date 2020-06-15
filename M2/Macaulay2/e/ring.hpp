@@ -146,10 +146,10 @@ public:
   virtual ring_elem copy(const ring_elem f) const = 0;
   virtual void remove(ring_elem &f) const = 0;
 
-  void negate_to(ring_elem &f) const;
-  void add_to(ring_elem &f, ring_elem &g) const;
-  void subtract_to(ring_elem &f, ring_elem &g) const;
-  void mult_to(ring_elem &f, const ring_elem g) const;
+  virtual void negate_to(ring_elem &f) const;
+  virtual void add_to(ring_elem &f, ring_elem &g) const;
+  virtual void subtract_to(ring_elem &f, ring_elem &g) const;
+  virtual void mult_to(ring_elem &f, const ring_elem g) const;
 
   virtual ring_elem negate(const ring_elem f) const = 0;
   virtual ring_elem add(const ring_elem f, const ring_elem g) const = 0;
@@ -190,7 +190,10 @@ public:
   // to be positive.  The routine must handle the case when a=0, but can
   // ignore the case when b=0... (Really?)
 
-  virtual ring_elem random() const;
+  virtual ring_elem random() const
+  {
+    throw exc::engine_error("random scalar elements for this ring are not implemented");
+  }
 
   virtual void elem_text_out(buffer &o,
                              const ring_elem f,

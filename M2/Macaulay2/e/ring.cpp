@@ -197,12 +197,6 @@ bool Ring::from_complex_double(double re, double im, ring_elem &result) const
   return false;
 }
 
-ring_elem Ring::random() const
-{
-  ERROR("random scalar elements for this ring are not implemented");
-  return 0;
-}
-
 ring_elem Ring::preferred_associate(ring_elem f) const
 {
   // Here we assume that 'this' is a field:

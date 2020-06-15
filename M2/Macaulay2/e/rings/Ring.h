@@ -45,10 +45,7 @@ public:
   virtual M2::RingTypeId get_typeid() const { return M2::RingTypeId::RING; }
 
   virtual M2::RingID ringID() const { return M2::ring_old; }
-  virtual bool is_basic_ring() const
-  {
-    return true;
-  }  // The default is to be a basic ring.
+  virtual bool is_basic_ring() const { return true; }
   virtual bool isFinitePrimeField() const { return false; }
   virtual bool is_ZZ() const { return false; }
   virtual bool is_QQ() const { return false; }
@@ -61,30 +58,24 @@ public:
   // fraction rings, and localizations.
   // If this returns true, then 'get_denominator_ring()' returns non-NULL value.
   //
-
   virtual bool is_poly_ring() const { return false; }
   // Returns true if this is a polynomial ring, possibly with fractions
   // and possibly with quotient ideal, and possibly with non-commutative
   // multiplication.  Equivalent to (cast_to_PolynomialRing() != 0).
-
   virtual bool is_commutative_ring() const { return true; }
   // Returns true iff this is a commutative ring.
-
   virtual bool is_quotient_ring() const { return false; }
   // Returns true if this is a polynomial ring, (possibly with fractions),
   // with a quotient ideal.  This could be a non-commutative ring
   // with skew-commutative, Weyl algebra, or other multiplication.
-
   virtual bool is_weyl_algebra() const { return false; }
   // Returns true if this is a polynomial ring (possibly with quotient)
   // (possibly with ZZ fractions, or other commutative fractions)
   // but with Weyl algebra multiplication on some of the variables.
-
   virtual bool is_skew_commutative_ring() const { return false; }
   // Returns true if this is a polynomial ring (possibly with quotient)
   // (possibly with ZZ fractions, or other commutative fractions)
   // but with some variables anti-commuting.
-
   virtual bool is_solvable_algebra() const { return false; }
   virtual bool is_graded() const { return true; }
   // Is this ring graded, with the given grading?
@@ -130,7 +121,6 @@ public:
 /*******************************************************************************
  *   OTHER
  ******************************************************************************/
-
 public:
   // Galois Field routines.  These three routines only return non-NULL values
   // if this was created as a Galois field, isom to A = kk[b]/(f(b)), kk = prime
