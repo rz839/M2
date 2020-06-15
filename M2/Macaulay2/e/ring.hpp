@@ -68,59 +68,8 @@ public:
   const Monoid *impl_degree_monoid() const;
 
   // ---------------------------------------------------------------------------
-  //   Ring Down-casting
-  // ---------------------------------------------------------------------------
-
-  virtual const Tower *cast_to_Tower() const { return 0; }
-  virtual Tower *cast_to_Tower() { return 0; }
-  virtual const PolynomialRing *cast_to_PolynomialRing() const { return 0; }
-  virtual PolynomialRing *cast_to_PolynomialRing() { return 0; }
-  virtual const PolyRing *cast_to_PolyRing() const { return 0; }
-  virtual PolyRing *cast_to_PolyRing() { return 0; }
-  virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return 0; }
-  virtual PolyRingFlat *cast_to_PolyRingFlat() { return 0; }
-
-  // these cannot quite be removed yet
-  virtual const SchurRing *cast_to_SchurRing() const { return 0; }
-  virtual SchurRing *cast_to_SchurRing() { return 0; }
-  virtual const SolvableAlgebra *cast_to_SolvableAlgebra() const { return 0; }
-  virtual SolvableAlgebra *cast_to_SolvableAlgebra() { return 0; }
-  virtual const WeylAlgebra *cast_to_WeylAlgebra() const { return 0; }
-
-  virtual RRR *cast_to_RRR() { return 0; }
-  virtual const RRR *cast_to_RRR() const { return 0; }
-  virtual CCC *cast_to_CCC() { return 0; }
-  virtual const CCC *cast_to_CCC() const { return 0; }
-  // Galois Field routines.  These three routines only return non-NULL values
-  // if this was created as a Galois field, isom to A = kk[b]/(f(b)), kk = prime
-  // field of char p.
-
-  // ---------------------------------------------------------------------------
   //   Other Methods (used for specific rings)
   // ---------------------------------------------------------------------------
-
-  // Returns NULL if not a GF.  Returns f(b) in the ring kk[b].  (Variable name
-  // might be different)
-  virtual const RingElement *getMinimalPolynomial() const { return 0; }
-  // Returns NULL if not a GF.  Returns an element of 'this', whose powers give
-  // all non-zero elements
-  // of the field.
-  virtual const RingElement *getGenerator() const
-  {
-    ERROR("not implemented for this ring");
-    return 0;
-  }
-
-  // Returns the element in the polynomial ring A corresponding to the element
-  // a.
-  // Returns NULL if not a GF field.
-  // Essentially the same as 'lift', except that more information, not readily
-  // available, is needed
-  // for that call.
-  virtual const RingElement *getRepresentation(const ring_elem &a) const
-  {
-    return 0;
-  }
 
   virtual MutableMatrix *makeMutableMatrix(size_t nrows,
                                            size_t ncols,
@@ -135,14 +84,9 @@ public:
 
   virtual SumCollector *make_SumCollector() const;
 
-  virtual void text_out(buffer &o) const = 0;
-
   // ---------------------------------------------------------------------------
   //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
-
-  virtual unsigned int computeHashValue(const ring_elem a) const = 0;
-
   virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const;
 
   virtual ring_elem from_long(long n) const = 0;

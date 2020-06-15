@@ -12,9 +12,20 @@
 static constexpr bool RZ_CRTP = false;
 class ARing;
 class CoefficientRingR;
+class Tower;
+class PolyRing;
+class PolyRingFlat;
+class SchurRing;
+class WeylAlgebra;
+class SolvableAlgebra;
+class RRR;
+class CCC;
 
 class IRing
 {
+public:
+  virtual unsigned int computeHashValue(const ring_elem a) const = 0;
+
 /*******************************************************************************
  *   TRAITS
  ******************************************************************************/
@@ -92,9 +103,38 @@ public:
   // There are only a few rings which do not have such divisors: frac rings
   //   over quotients of poly rings.
 
+  /*****************************************************************************
+   *  DOWN-CASTING - to be removed
+   ****************************************************************************/
+
+  virtual const Tower *cast_to_Tower() const { return 0; }
+  virtual Tower *cast_to_Tower() { return 0; }
+  virtual const PolynomialRing *cast_to_PolynomialRing() const { return 0; }
+  virtual PolynomialRing *cast_to_PolynomialRing() { return 0; }
+  virtual const PolyRing *cast_to_PolyRing() const { return 0; }
+  virtual PolyRing *cast_to_PolyRing() { return 0; }
+  virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return 0; }
+  virtual PolyRingFlat *cast_to_PolyRingFlat() { return 0; }
+
+  virtual const SchurRing *cast_to_SchurRing() const { return 0; }
+  virtual SchurRing *cast_to_SchurRing() { return 0; }
+  virtual const SolvableAlgebra *cast_to_SolvableAlgebra() const { return 0; }
+  virtual SolvableAlgebra *cast_to_SolvableAlgebra() { return 0; }
+  virtual const WeylAlgebra *cast_to_WeylAlgebra() const { return 0; }
+
+  virtual RRR *cast_to_RRR() { return 0; }
+  virtual const RRR *cast_to_RRR() const { return 0; }
+  virtual CCC *cast_to_CCC() { return 0; }
+  virtual const CCC *cast_to_CCC() const { return 0; }
+
 /*******************************************************************************
- *   ARITHMETIC
+ *   OTHER
  ******************************************************************************/
+
+public:
+  // Galois Field routines.  These three routines only return non-NULL values
+  // if this was created as a Galois field, isom to A = kk[b]/(f(b)), kk = prime
+  // field of char p.
 
   // For some finite fields, if a = (getGenerator())^r, return r.
   // If it is not implemented for this ring, an exception is thrown
@@ -103,6 +143,35 @@ public:
   {
     throw exc::engine_error("cannot compute discrete logarithm in this ring");
   }
+
+  // Returns NULL if not a GF.  Returns f(b) in the ring kk[b].  (Variable name
+  // might be different)
+  virtual const RingElement *getMinimalPolynomial() const { return 0; }
+  // Returns NULL if not a GF.  Returns an element of 'this', whose powers give
+  // all non-zero elements
+  // of the field.
+  virtual const RingElement *getGenerator() const
+  {
+    throw exc::engine_error("not implemented for this ring");
+  }
+
+  // Returns the element in the polynomial ring A corresponding to the element
+  // a.
+  // Returns NULL if not a GF field.
+  // Essentially the same as 'lift', except that more information, not readily
+  // available, is needed
+  // for that call.
+  virtual const RingElement *getRepresentation(const ring_elem &a) const
+  {
+    return 0;
+  }
+
+  virtual void text_out(buffer &o) const = 0;
+
+/*******************************************************************************
+ *   ARITHMETIC
+ ******************************************************************************/
+
 public:
   virtual ring_elem power(ring_elem f, int n) const = 0;
 //  virtual ring_elem mult(ring_elem f, ring_elem g) const = 0;
