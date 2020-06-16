@@ -163,10 +163,6 @@ public:
  ******************************************************************************/
 
 public:
-  virtual ring_elem power(ring_elem f, int n) const = 0;
-//  virtual ring_elem mult(ring_elem f, ring_elem g) const = 0;
-  virtual ring_elem invert(ring_elem f) const = 0;
-
   virtual std::pair<bool, long> coerceToLongInteger(ring_elem a) const = 0;
 
   virtual ring_elem from_long(long n) const = 0;
@@ -236,14 +232,12 @@ public:
   virtual void subtract_to(ring_elem &f, ring_elem &g) const = 0;
   virtual void mult_to(ring_elem &f, const ring_elem g) const = 0;
 
-#if 0
-  virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
-//  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
-  // These two power routines can be used for n >= 0.
-
-//  virtual ring_elem invert(const ring_elem f) const = 0;  // TODO(RZ): remove - crtp'ed
+  virtual ring_elem power(ring_elem f, int n) const = 0;
+  virtual ring_elem power(const ring_elem f, mpz_srcptr n) const = 0;
+  virtual ring_elem invert(const ring_elem f) const = 0;
   virtual ring_elem divide(const ring_elem f, const ring_elem g) const = 0;
 
+#if 0
   virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
   virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
   virtual ring_elem remainderAndQuotient(const ring_elem f,
@@ -327,10 +321,6 @@ protected:
   M2_arrayint get_heft_vector() const { return m_heft_vector; }  // can be NULL
 
 public:
-  ring_elem power(ring_elem f, int n) const override { return crtp()->impl_power(f, n); }
-//  ring_elem mult(ring_elem f, ring_elem g) override { return crtp()->impl_mult(f, g); }
-  ring_elem invert(ring_elem f) const override { throw exc::engine_error("inverse not supported in this ring"); }
-
   std::pair<bool, long> coerceToLongInteger(ring_elem a) const override { return {}; }
   ring_elem from_long(long n) const override { return crtp()->template not_impl<ring_elem>(); }
   ring_elem from_int(mpz_srcptr n) const override { return crtp()->template not_impl<ring_elem>(); }
@@ -376,9 +366,16 @@ public:
   void subtract_to(ring_elem &f, ring_elem &g) const override { f=crtp()->subtract(f,g); }
   void mult_to(ring_elem &f, const ring_elem g) const override { f=crtp()->mult(f,g); }
 
+  ring_elem power(const ring_elem f, int n) const override { return crtp()->impl_power(f,n); }
+  ring_elem power(const ring_elem f, mpz_srcptr n) const override { return crtp()->impl_power(f,n); }
+  ring_elem invert(const ring_elem f) const override { throw exc::engine_error("crtp method not implemented on this level"); }
+  ring_elem divide(const ring_elem f, const ring_elem g) const override;
+
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;
-// [[maybe_unused]] ring_elem impl_mult(ring_elem f, ring_elem g) const;
+  [[maybe_unused]] ring_elem impl_power(ring_elem f, mpz_srcptr n) const;
+
+//  [[maybe_unused]] ring_elem impl_mult(ring_elem f, ring_elem g) const;
 
   /** @name Vector Methods *****************************************************
    *

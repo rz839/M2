@@ -50,50 +50,6 @@ FreeModule *Ring::make_FreeModule(int n) const
   return new FreeModule(this, n, false);
 }
 
-ring_elem Ring::power(const ring_elem gg, mpz_srcptr m) const
-{
-  ring_elem ff = gg;
-  int cmp = mpz_sgn(m);
-  if (cmp == 0) return one();
-  mpz_t n;
-  mpz_init_set(n, m);
-  if (cmp < 0)
-    {
-      mpz_neg(n, n);
-      ff = invert(ff);
-      if (is_zero(ff))
-        {
-          ERROR(
-              "either element not invertible, or no method available to "
-              "compute its inverse");
-          return ff;
-        }
-    }
-  ring_elem prod = from_long(1);
-  ring_elem base = copy(ff);
-  ring_elem tmp;
-
-  for (;;)
-    {
-      if (RingZZ::mod_ui(n, 2) == 1)
-        {
-          tmp = mult(prod, base);
-          prod = tmp;
-        }
-      mpz_tdiv_q_2exp(n, n, 1);
-      if (mpz_sgn(n) == 0)
-        {
-          mpz_clear(n);
-          return prod;
-        }
-      else
-        {
-          tmp = mult(base, base);
-          base = tmp;
-        }
-    }
-}
-
 //ring_elem Ring::power(const ring_elem gg, int n) const
 //{
 //  ring_elem ff = gg;

@@ -88,13 +88,6 @@ public:
   //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
 
-  virtual ring_elem power(const ring_elem f, mpz_srcptr n) const;
-//  virtual ring_elem power(const ring_elem f, int n) const;  // TODO(RZ): remove - crtp'ed
-  // These two power routines can be used for n >= 0.
-
-//  virtual ring_elem invert(const ring_elem f) const = 0;  // TODO(RZ): remove - crtp'ed
-  virtual ring_elem divide(const ring_elem f, const ring_elem g) const = 0;
-
   virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
   virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
   virtual ring_elem remainderAndQuotient(const ring_elem f,
