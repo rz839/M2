@@ -216,3 +216,13 @@ ring_elem RingBase<D>::divide(const ring_elem f, const ring_elem g) const
 {
   return crtp()->mult(f, crtp()->invert(g));
 }
+
+template <typename D>
+int RingBase<D>::index_of_var(const ring_elem a) const { return -1; }
+
+template <typename D>
+M2_arrayint RingBase<D>::support(const ring_elem a) const
+{
+  M2_arrayint result = M2_makearrayint(0);
+  return result;
+}

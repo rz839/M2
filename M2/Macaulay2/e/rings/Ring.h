@@ -237,6 +237,19 @@ public:
   virtual ring_elem invert(const ring_elem f) const = 0;
   virtual ring_elem divide(const ring_elem f, const ring_elem g) const = 0;
 
+  virtual void elem_text_out(buffer &o,
+                             const ring_elem f,
+                             bool p_one = true,
+                             bool p_plus = false,
+                             bool p_parens = false) const = 0;
+
+  virtual ring_elem eval(const RingMap *map,
+                         const ring_elem f,
+                         int first_var) const = 0;
+
+  virtual int index_of_var(const ring_elem a) const = 0;
+  virtual M2_arrayint support(const ring_elem a) const = 0;
+
 #if 0
   virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
   virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
@@ -370,6 +383,9 @@ public:
   ring_elem power(const ring_elem f, mpz_srcptr n) const override { return crtp()->impl_power(f,n); }
   ring_elem invert(const ring_elem f) const override { throw exc::engine_error("crtp method not implemented on this level"); }
   ring_elem divide(const ring_elem f, const ring_elem g) const override;
+
+  int index_of_var(const ring_elem a) const override;
+  M2_arrayint support(const ring_elem a) const override;
 
 protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;

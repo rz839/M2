@@ -123,20 +123,10 @@ public:
     throw exc::engine_error("random scalar elements for this ring are not implemented");
   }
 
-  virtual void elem_text_out(buffer &o,
-                             const ring_elem f,
-                             bool p_one = true,
-                             bool p_plus = false,
-                             bool p_parens = false) const = 0;
-
-  virtual ring_elem eval(const RingMap *map,
-                         const ring_elem f,
-                         int first_var) const = 0;
 
   // Polynomial routines
   // The default implementation is for non-polynomial rings
-  virtual int index_of_var(const ring_elem a) const;
-  virtual M2_arrayint support(const ring_elem a) const;
+
 
   virtual void monomial_divisor(const ring_elem a, int *exp) const;
   virtual ring_elem diff(ring_elem a, ring_elem b, int use_coeff) const;

@@ -167,12 +167,6 @@ void Ring::degree_weights(const ring_elem, M2_arrayint, int &lo, int &hi) const
 {
   lo = hi = 0;
 }
-int Ring::index_of_var(const ring_elem a) const { return -1; }
-M2_arrayint Ring::support(const ring_elem a) const
-{
-  M2_arrayint result = M2_makearrayint(0);
-  return result;
-}
 
 // These next three routines are only overridden by RRR,CCC,polynomial rings,
 // and quotient rings
