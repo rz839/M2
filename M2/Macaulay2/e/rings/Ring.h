@@ -250,6 +250,33 @@ public:
   virtual int index_of_var(const ring_elem a) const = 0;
   virtual M2_arrayint support(const ring_elem a) const = 0;
 
+  virtual void monomial_divisor(const ring_elem a, int *exp) const;
+  virtual ring_elem diff(ring_elem a, ring_elem b, int use_coeff) const;
+  virtual bool in_subring(int nslots, const ring_elem a) const;
+  virtual void degree_of_var(int n, const ring_elem a, int &lo, int &hi) const;
+  virtual ring_elem divide_by_var(int n, int d, const ring_elem a) const;
+  virtual ring_elem divide_by_expvector(const int *exp, const ring_elem a) const;
+
+  virtual ring_elem homogenize(const ring_elem f, int v, int deg, M2_arrayint wts) const;
+  virtual ring_elem homogenize(const ring_elem f, int v, M2_arrayint wts) const;
+
+  // Routines expecting a grading.  The default implementation
+  // is that the only degree is 0.
+  virtual bool is_homogeneous(const ring_elem f) const;
+  virtual void degree(const ring_elem f, int *d) const;
+  virtual bool multi_degree(const ring_elem f, int *d) const;
+  // returns true iff f is homogeneous
+  virtual void degree_weights(const ring_elem f,
+                              M2_arrayint wts,
+                              int &lo,
+                              int &hi) const;
+
+  // antipode: for non skew commuting poly rings, this is the identity.
+  // Otherwise, this changes the signs of the monomials, implementing the
+  // (anti)-isomorphism
+  // of the ring with its opposite ring.
+  virtual ring_elem antipode(ring_elem f) const { return f; }
+
 #if 0
   virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
   virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
@@ -387,7 +414,29 @@ public:
   int index_of_var(const ring_elem a) const override;
   M2_arrayint support(const ring_elem a) const override;
 
-protected:
+  void monomial_divisor(const ring_elem a, int *exp) const override {}
+  ring_elem diff(ring_elem a, ring_elem b, int use_coeff) const override { return crtp()->mult(a, b); }
+  bool in_subring(int nslots, const ring_elem a) const override { return true; }
+  void degree_of_var(int n, const ring_elem a, int &lo, int &hi) const override { hi = lo = 0; }
+  ring_elem divide_by_var(int n, int d, const ring_elem a) const override;
+  ring_elem divide_by_expvector(const int *exp, const ring_elem a) const override { return a; }
+
+  ring_elem homogenize(const ring_elem f, int v, int deg, M2_arrayint wts) const override;
+  ring_elem homogenize(const ring_elem f, int v, M2_arrayint wts) const override { return f; }
+
+  // Routines expecting a grading.  The default implementation
+  // is that the only degree is 0.
+  bool is_homogeneous(const ring_elem f) const override { return true; }
+  void degree(const ring_elem f, int *d) const override;
+  bool multi_degree(const ring_elem f, int *d) const override;
+  // returns true iff f is homogeneous
+  void degree_weights(const ring_elem f,
+                              M2_arrayint wts,
+                              int &lo,
+                              int &hi) const override { hi=lo=0; }
+
+
+ protected:
   [[maybe_unused]] ring_elem impl_power(ring_elem f, int n) const;
   [[maybe_unused]] ring_elem impl_power(ring_elem f, mpz_srcptr n) const;
 

@@ -226,3 +226,28 @@ M2_arrayint RingBase<D>::support(const ring_elem a) const
   M2_arrayint result = M2_makearrayint(0);
   return result;
 }
+
+template <typename D>
+ring_elem RingBase<D>::divide_by_var(int n, int d, const ring_elem a) const
+{
+  if (d == 0) return a;
+  return from_long(0);
+}
+
+template <typename D>
+ring_elem RingBase<D>::homogenize(const ring_elem f, int, int deg, M2_arrayint) const
+{
+  if (deg != 0) ERROR("homogenize: no homogenization exists");
+  return f;
+}
+
+template <typename D>
+void RingBase<D>::degree(const ring_elem, int *d) const { degree_monoid()->one(d); }
+
+template <typename D>
+bool RingBase<D>::multi_degree(const ring_elem f, int *d) const
+// returns true iff f is homogeneous
+{
+  degree_monoid()->one(d);
+  return true;
+}

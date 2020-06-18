@@ -115,59 +115,6 @@ ring_elem Ring::remainderAndQuotient(const ring_elem f,
   return zero();
 }
 
-void Ring::monomial_divisor(const ring_elem a, int *exp) const
-{
-  // Do nothing
-}
-
-ring_elem Ring::diff(ring_elem a, ring_elem b, int use_coeff) const
-{
-  return mult(a, b);
-}
-
-bool Ring::in_subring(int nslots, const ring_elem a) const { return true; }
-void Ring::degree_of_var(int n, const ring_elem a, int &lo, int &hi) const
-{
-  lo = 0;
-  hi = 0;
-}
-
-ring_elem Ring::divide_by_var(int n, int d, const ring_elem a) const
-{
-  if (d == 0) return a;
-  return from_long(0);
-}
-
-ring_elem Ring::divide_by_expvector(const int *exp, const ring_elem a) const
-{
-  return a;
-}
-
-ring_elem Ring::homogenize(const ring_elem f, int, int deg, M2_arrayint) const
-{
-  if (deg != 0) ERROR("homogenize: no homogenization exists");
-  return f;
-}
-
-ring_elem Ring::homogenize(const ring_elem f, int, M2_arrayint) const
-{
-  return f;
-}
-
-bool Ring::is_homogeneous(const ring_elem) const { return true; }
-void Ring::degree(const ring_elem, int *d) const { degree_monoid()->one(d); }
-bool Ring::multi_degree(const ring_elem f, int *d) const
-// returns true iff f is homogeneous
-{
-  degree_monoid()->one(d);
-  return true;
-}
-
-void Ring::degree_weights(const ring_elem, M2_arrayint, int &lo, int &hi) const
-{
-  lo = hi = 0;
-}
-
 // These next three routines are only overridden by RRR,CCC,polynomial rings,
 // and quotient rings
 unsigned long Ring::get_precision() const { return 0; }
