@@ -251,3 +251,31 @@ bool RingBase<D>::multi_degree(const ring_elem f, int *d) const
   degree_monoid()->one(d);
   return true;
 }
+
+template <typename D>
+ring_elem RingBase<D>::remainder(const ring_elem f, const ring_elem g) const
+{
+  if (crtp()->is_zero(g)) return f;
+  return crtp()->zero();
+}
+
+template <typename D>
+ring_elem RingBase<D>::quotient(const ring_elem f, const ring_elem g) const
+{
+  if (crtp()->is_zero(g)) return g;
+  return crtp()->divide(f, g);
+}
+
+template <typename D>
+ring_elem RingBase<D>::remainderAndQuotient(const ring_elem f,
+                                     const ring_elem g,
+                                     ring_elem &quot) const
+{
+  if (crtp()->is_zero(g))
+  {
+    quot = g;  // zero
+    return f;
+  }
+  quot = crtp()->divide(f, g);
+  return crtp()->zero();
+}

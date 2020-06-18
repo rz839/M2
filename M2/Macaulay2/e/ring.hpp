@@ -88,36 +88,6 @@ public:
   //   Ring Arithmetic and Conversion
   // ---------------------------------------------------------------------------
 
-  virtual ring_elem remainder(const ring_elem f, const ring_elem g) const;
-  virtual ring_elem quotient(const ring_elem f, const ring_elem g) const;
-  virtual ring_elem remainderAndQuotient(const ring_elem f,
-                                         const ring_elem g,
-                                         ring_elem &quot) const;
-  // The default version is for a field:
-  //   f % 0 is f, otherwise f % g is 0.
-  //   f // 0 is 0, otherwise f // g is f/g
-  // These three routines: remainder, quotient and remainderAndQuotient
-  // satisfy these properties:
-  // If r = remainder(f,g), q = quotient(f,g), then
-  // (1) f = q*g + r
-  // (2) If f is in ideal(g), then r = 0.
-  // (3) If g is invertible, then r = 0, and q = f * g^(-1).
-  // (4) If the ring is ZZ, then the remainder is "balanced": -[g/2] < r <=
-  // [g/2]
-  // remainderAndQuotient combines remainder and quotient into one routine.
-
-  virtual void syzygy(const ring_elem a,
-                      const ring_elem b,
-                      ring_elem &x,
-                      ring_elem &y) const = 0;
-  // Constructs elements x and y in the ring s.t. ax + by = 0.  This syzygy is
-  // chosen as simply as possible.  For example, over QQ, x is chosen
-  // to be positive.  The routine must handle the case when a=0, but can
-  // ignore the case when b=0... (Really?)
-
-
-
-
   virtual ring_elem random() const
   {
     throw exc::engine_error("random scalar elements for this ring are not implemented");

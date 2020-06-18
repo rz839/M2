@@ -90,31 +90,6 @@ FreeModule *Ring::make_FreeModule(int n) const
 //    }
 //}
 
-ring_elem Ring::remainder(const ring_elem f, const ring_elem g) const
-{
-  if (is_zero(g)) return f;
-  return zero();
-}
-
-ring_elem Ring::quotient(const ring_elem f, const ring_elem g) const
-{
-  if (is_zero(g)) return g;
-  return divide(f, g);
-}
-
-ring_elem Ring::remainderAndQuotient(const ring_elem f,
-                                     const ring_elem g,
-                                     ring_elem &quot) const
-{
-  if (is_zero(g))
-    {
-      quot = g;  // zero
-      return f;
-    }
-  quot = divide(f, g);
-  return zero();
-}
-
 // These next three routines are only overridden by RRR,CCC,polynomial rings,
 // and quotient rings
 unsigned long Ring::get_precision() const { return 0; }
