@@ -90,22 +90,6 @@ FreeModule *Ring::make_FreeModule(int n) const
 //    }
 //}
 
-// These next three routines are only overridden by RRR,CCC,polynomial rings,
-// and quotient rings
-unsigned long Ring::get_precision() const { return 0; }
-ring_elem Ring::zeroize_tiny(gmp_RR epsilon, const ring_elem f) const
-// Default is to return f itself.
-{
-  return f;
-}
-
-void Ring::increase_maxnorm(gmp_RRmutable norm, const ring_elem f) const
-// If any real number appearing in f has larger absolute value than norm,
-// replace norm.
-{
-  // Default for rings not over RRR or CCC is to do nothing.
-}
-
 ///////////////////////////////////
 // SumCollector: default version //
 ///////////////////////////////////

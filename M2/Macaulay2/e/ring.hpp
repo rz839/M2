@@ -84,32 +84,6 @@ public:
 
   virtual SumCollector *make_SumCollector() const;
 
-  // ---------------------------------------------------------------------------
-  //   Ring Arithmetic and Conversion
-  // ---------------------------------------------------------------------------
-
-  virtual ring_elem random() const
-  {
-    throw exc::engine_error("random scalar elements for this ring are not implemented");
-  }
-
-  //////////////////////////////////////////
-  // Cleaning real and complex numbers /////
-  //////////////////////////////////////////
-  virtual unsigned long get_precision()
-      const;  // if the ring is not over RRR or CCC, returns 0.
-  virtual ring_elem zeroize_tiny(gmp_RR epsilon, const ring_elem f) const;
-  // Default is to return f itself.
-  virtual void increase_maxnorm(gmp_RRmutable norm, const ring_elem f) const;
-  // If any real number appearing in f has larger absolute value than norm,
-  // replace norm.
-  // Default for rings not over RRR or CCC is to do nothing.
-  vec vec_zeroize_tiny(gmp_RR epsilon, const vec f) const;
-  // Default is to return f itself.
-  void vec_increase_maxnorm(gmp_RRmutable norm, const vec f) const;
-  // If any real number appearing in f has larger absolute value than norm,
-  // replace norm.
-  // Default for rings not over RRR or CCC is to do nothing.
 
   //////////////////////////////////////////
   /// vector operations ////////////////////
@@ -121,6 +95,13 @@ public:
   //
   // These routines are implemented in ring-vec.cpp
   //////////////////////////////////////////
+
+  vec vec_zeroize_tiny(gmp_RR epsilon, const vec f) const;
+  // If any real number appearing in f has larger absolute value than norm,
+  // replace norm.
+  // Default for rings not over RRR or CCC is to do nothing.
+  // Default for rings not over RRR or CCC is to do nothing.
+  void vec_increase_maxnorm(gmp_RRmutable norm, const vec f) const;
  protected:
 //  vec new_vec() const;
   void remove_vec_node(vec n) const;
