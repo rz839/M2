@@ -243,6 +243,10 @@ public:
                              bool p_plus = false,
                              bool p_parens = false) const = 0;
 
+  /*******************************************************************************
+   * POLYNOMIAL ROUTINES
+   ******************************************************************************/
+
   virtual ring_elem eval(const RingMap *map,
                          const ring_elem f,
                          int first_var) const = 0;
@@ -250,26 +254,26 @@ public:
   virtual int index_of_var(const ring_elem a) const = 0;
   virtual M2_arrayint support(const ring_elem a) const = 0;
 
-  virtual void monomial_divisor(const ring_elem a, int *exp) const;
-  virtual ring_elem diff(ring_elem a, ring_elem b, int use_coeff) const;
-  virtual bool in_subring(int nslots, const ring_elem a) const;
-  virtual void degree_of_var(int n, const ring_elem a, int &lo, int &hi) const;
-  virtual ring_elem divide_by_var(int n, int d, const ring_elem a) const;
-  virtual ring_elem divide_by_expvector(const int *exp, const ring_elem a) const;
+  virtual void monomial_divisor(const ring_elem a, int *exp) const = 0;
+  virtual ring_elem diff(ring_elem a, ring_elem b, int use_coeff) const = 0;
+  virtual bool in_subring(int nslots, const ring_elem a) const = 0;
+  virtual void degree_of_var(int n, const ring_elem a, int &lo, int &hi) const = 0;
+  virtual ring_elem divide_by_var(int n, int d, const ring_elem a) const = 0;
+  virtual ring_elem divide_by_expvector(const int *exp, const ring_elem a) const = 0;
 
-  virtual ring_elem homogenize(const ring_elem f, int v, int deg, M2_arrayint wts) const;
-  virtual ring_elem homogenize(const ring_elem f, int v, M2_arrayint wts) const;
+  virtual ring_elem homogenize(const ring_elem f, int v, int deg, M2_arrayint wts) const = 0;
+  virtual ring_elem homogenize(const ring_elem f, int v, M2_arrayint wts) const = 0;
 
   // Routines expecting a grading.  The default implementation
   // is that the only degree is 0.
-  virtual bool is_homogeneous(const ring_elem f) const;
-  virtual void degree(const ring_elem f, int *d) const;
-  virtual bool multi_degree(const ring_elem f, int *d) const;
+  virtual bool is_homogeneous(const ring_elem f) const = 0;
+  virtual void degree(const ring_elem f, int *d) const = 0;
+  virtual bool multi_degree(const ring_elem f, int *d) const = 0;
   // returns true iff f is homogeneous
   virtual void degree_weights(const ring_elem f,
                               M2_arrayint wts,
                               int &lo,
-                              int &hi) const;
+                              int &hi) const = 0;
 
   // antipode: for non skew commuting poly rings, this is the identity.
   // Otherwise, this changes the signs of the monomials, implementing the
