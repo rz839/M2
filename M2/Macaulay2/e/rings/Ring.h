@@ -476,7 +476,24 @@ public:
    * These are methods for vector operations. Move to an adaptor or a decorator
    * class later.
    */
+protected:
   vec new_vec() const { return new vecterm; }
+  void remove_vec_node(vec n) const;
+
+public:
+  void vec_sort(vecterm *&f) const;
+
+  int compare_vecs(vec v, vec w) const;
+
+  vec e_sub_i(int r) const;
+  vec make_vec(int r, ring_elem a) const;
+  vec make_vec_from_array(int len, Nterm **array) const;  /// takes ownership of the Nterm's!!
+
+  vec copy_vec(const vecterm *v) const;
+  void remove_vec(vec v) const;
+
+  void add_vec_to(vec &v, vec &w) const;       /// v <- v+w, w is set to 0.
+
 };
 
 #include "Ring.hpp"  // safe but confuses CLion

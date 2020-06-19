@@ -102,22 +102,14 @@ public:
   // Default for rings not over RRR or CCC is to do nothing.
   // Default for rings not over RRR or CCC is to do nothing.
   void vec_increase_maxnorm(gmp_RRmutable norm, const vec f) const;
- protected:
-//  vec new_vec() const;
-  void remove_vec_node(vec n) const;
+
+
+
+
+
+
 
  public:
-  void vec_sort(vecterm *&f) const;
-
-  int compare_vecs(vec v, vec w) const;
-
-  vec e_sub_i(int r) const;
-  vec make_vec(int r, ring_elem a) const;
-  vec make_vec_from_array(int len, Nterm **array)
-      const;  // takes ownership of the Nterm's!!
-
-  vec copy_vec(const vecterm *v) const;
-  void remove_vec(vec v) const;
 
   bool get_entry(const vecterm *v, int r, ring_elem &result) const;
   ring_elem get_entry(vec v, int r) const;
@@ -145,7 +137,6 @@ public:
                    bool opposite_mult) const;  // multiplies v <- r * v or v * r
   void mult_row(vec &v, const ring_elem r, int i, bool opposite_mult) const;
   void negate_vec_to(vec &v) const;            // v <- -v.
-  void add_vec_to(vec &v, vec &w) const;       // v <- v+w, w is set to 0.
   void subtract_vec_to(vec &v, vec &w) const;  // v <- v-w, w is set to 0.
 
   vec mult_vec_matrix(const Matrix *m, vec v, bool opposite_mult) const;
