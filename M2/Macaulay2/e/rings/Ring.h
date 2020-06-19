@@ -480,3 +480,4 @@ public:
 };
 
 #include "Ring.hpp"  // safe but confuses CLion
+#include "RingVec.hpp"

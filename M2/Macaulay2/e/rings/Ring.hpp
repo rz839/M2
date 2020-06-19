@@ -5,7 +5,6 @@
 #pragma once
 
 #include "Ring.h"
-#include "RingEnum.h"
 
 template <typename D>
 const Monoid* RingBase<D>::degree_monoid() const
