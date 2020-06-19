@@ -36,6 +36,13 @@ class GBComputation;
 
 static_assert(!RZ_CRTP, "something is off");
 
+// TODO(RZ): implement CRTP for PolynomialRing, PolyRingFlat, PolyRing
+
+// using PolynomialRing = IPolynomialRing;
+// template <typename Derived>
+// class PolynomialRingBase : RingBase<Derived> {};
+// no complete ring should be needed
+
 class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRing>, Ring>
 {
   bool is_graded_;
