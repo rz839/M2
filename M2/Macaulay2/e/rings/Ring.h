@@ -366,6 +366,10 @@ public:
   // Some divisibility routines
   virtual vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const = 0;
   virtual MutableMatrix *makeMutableMatrix(size_t nrows, size_t ncols, bool dense) const { return nullptr; }
+
+  virtual FreeModule *make_FreeModule() const = 0;
+  virtual FreeModule *make_Schreyer_FreeModule() const = 0;
+  virtual FreeModule *make_FreeModule(int n) const = 0;
 };
 
 template <typename Derived>
@@ -602,6 +606,10 @@ public:
 
   // Some divisibility routines
   vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const override;
+
+  FreeModule *make_FreeModule() const override;
+  FreeModule *make_Schreyer_FreeModule() const override;
+  FreeModule *make_FreeModule(int n) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion

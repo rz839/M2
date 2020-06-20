@@ -879,3 +879,21 @@ vec RingBase<D>::vec_remove_monomial_factors(vec f, bool make_squarefree_only) c
   if (PR == 0) return copy_vec(f);
   return 0;
 }
+
+template <typename D>
+FreeModule *RingBase<D>::make_FreeModule() const
+{
+  return M2::bugfix::new_FreeModule(crtp(), 0, false);
+}
+
+template <typename D>
+FreeModule *RingBase<D>::make_Schreyer_FreeModule() const
+{
+  return M2::bugfix::new_FreeModule(crtp(), 0, true);
+}
+
+template <typename D>
+FreeModule *RingBase<D>::make_FreeModule(int n) const
+{
+  return M2::bugfix::new_FreeModule(crtp(), n, false);
+}

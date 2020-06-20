@@ -33,20 +33,6 @@ void Ring::initialize_ring(long P0,
   Base::m_isfield = 0;
 }
 
-FreeModule *Ring::make_FreeModule() const
-{
-  return M2::bugfix::new_FreeModule(this, 0, false);
-}
-
-FreeModule *Ring::make_Schreyer_FreeModule() const
-{
-  return M2::bugfix::new_FreeModule(this, 0, true);
-}
-
-FreeModule *Ring::make_FreeModule(int n) const
-{
-  return M2::bugfix::new_FreeModule(this, n, false);
-}
 
 //ring_elem Ring::power(const ring_elem gg, int n) const
 //{

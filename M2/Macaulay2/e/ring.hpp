@@ -67,9 +67,6 @@ public:
   //   Other Methods (used for specific rings)
   // ---------------------------------------------------------------------------
 
-  virtual FreeModule *make_FreeModule() const;
-  virtual FreeModule *make_Schreyer_FreeModule() const;
-  virtual FreeModule *make_FreeModule(int n) const;
   virtual SumCollector *make_SumCollector() const;
 
 public:
