@@ -44,13 +44,6 @@ class MutableMatrix;
 
 class CoefficientRingR;
 
-/**
-    @ingroup rings
-
-    @brief xxx
-    xxx
-    xxx
-*/
 class Ring : public RingBase<Ring>
 {
 public:
@@ -74,32 +67,13 @@ public:
   //   Other Methods (used for specific rings)
   // ---------------------------------------------------------------------------
 
-  virtual MutableMatrix *makeMutableMatrix(size_t nrows, size_t ncols, bool dense) const { return nullptr; }
   virtual FreeModule *make_FreeModule() const;
   virtual FreeModule *make_Schreyer_FreeModule() const;
   virtual FreeModule *make_FreeModule(int n) const;
   virtual SumCollector *make_SumCollector() const;
 
-
-  //////////////////////////////////////////
-  /// vector operations ////////////////////
-  //////////////////////////////////////////
-  // These routines all act on linked lists
-  // of vecterm's, sorted by descending component.
-  // We always assume that ringelem's are immutable:
-  // The same value might be shared in several vecterms.
-  //
-  // These routines are implemented in ring-vec.cpp
-  //////////////////////////////////////////
-
 public:
   vec tensor(const FreeModule *F, vec v, const FreeModule *G, vec w) const;
-
-  /* Polynomial routines.  These all set an error if the ring is not
-     a polynomial ring.  OR, they will be moved to polyring.hpp  */
-
-
-
   bool vec_is_homogeneous(const FreeModule *F, const vec f) const;
 };
 

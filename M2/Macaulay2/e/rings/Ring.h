@@ -365,6 +365,7 @@ public:
   virtual bool vec_is_scalar_multiple(vec f, vec g) const = 0;  // is cf = dg, some scalars c,d? (not both zero).
   // Some divisibility routines
   virtual vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const = 0;
+  virtual MutableMatrix *makeMutableMatrix(size_t nrows, size_t ncols, bool dense) const { return nullptr; }
 };
 
 template <typename Derived>
