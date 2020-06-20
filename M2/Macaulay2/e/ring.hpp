@@ -107,21 +107,7 @@ public:
   // returns true iff f is homogeneous
 
   void vec_degree(const FreeModule *F, const vec f, int *d) const;
-  void vec_degree_weights(const FreeModule *F,
-                          const vec f,
-                          M2_arrayint wts,
-                          int &lo,
-                          int &hi) const;
   bool vec_is_homogeneous(const FreeModule *F, const vec f) const;
-  vec vec_homogenize(const FreeModule *F,
-                     const vec f,
-                     int v,
-                     int deg,
-                     M2_arrayint wts) const;
-  vec vec_homogenize(const FreeModule *F,
-                     const vec f,
-                     int v,
-                     M2_arrayint wts) const;
 };
 
 class SumCollector : public our_new_delete

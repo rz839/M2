@@ -754,3 +754,72 @@ ring_elem RingBase<D>::vec_split_off_content(vec f, vec &result) const
     result = vec_divide_by_given_content(f, c);
   return c;
 }
+
+template <typename D>
+vec RingBase<D>::vec_homogenize(const FreeModule *F,
+                         const vec f,
+                         int v,
+                         int d,
+                         M2_arrayint wts) const
+// Any terms which can't be homogenized are silently set to 0
+{
+  vecterm head;
+  vecterm *result = &head;
+  assert(wts->array[v] != 0);
+  // If an error occurs, then return 0, and set ERROR
+
+  for (vec w = f; w != 0; w = w->next)
+    {
+      int e = M2::bugfix::primary_degree(F, w->comp);
+      ring_elem a = homogenize(w->coeff, v, d - e, wts);
+      if (!is_zero(a))
+        {
+          result->next = make_vec(w->comp, a);
+          result = result->next;
+        }
+    }
+  result->next = 0;
+  return head.next;
+}
+
+template <typename D>
+vec RingBase<D>::vec_homogenize(const FreeModule *F,
+                         const vec f,
+                         int v,
+                         M2_arrayint wts) const
+{
+  vecterm *result = NULL;
+  if (f == NULL) return result;
+  int lo, hi;
+  vec_degree_weights(F, f, wts, lo, hi);
+  assert(wts->array[v] != 0);
+  int d = (wts->array[v] > 0 ? hi : lo);
+  return vec_homogenize(F, f, v, d, wts);
+}
+
+template <typename D>
+void RingBase<D>::vec_degree_weights(const FreeModule *F,
+                              const vec f,
+                              M2_arrayint wts,
+                              int &lo,
+                              int &hi) const
+{
+  vecterm *t = f;
+  if (t == NULL)
+    {
+      lo = hi = 0;
+      return;
+    }
+  degree_weights(t->coeff, wts, lo, hi);
+  lo += M2::bugfix::primary_degree(F, t->comp);
+  hi += M2::bugfix::primary_degree(F, t->comp);
+  for (t = t->next; t != NULL; t = t->next)
+    {
+      int lo1, hi1;
+      degree_weights(t->coeff, wts, lo1, hi1);
+      lo1 += M2::bugfix::primary_degree(F, t->comp);
+      hi1 += M2::bugfix::primary_degree(F, t->comp);
+      if (hi1 > hi) hi = hi1;
+      if (lo1 < lo) lo = lo1;
+    }
+}

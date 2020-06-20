@@ -344,6 +344,21 @@ public:
   virtual vec vec_divide_by_given_content(vec f, ring_elem c) const = 0;
   virtual vec vec_divide_by_content(vec f) const = 0;
   virtual ring_elem vec_split_off_content(vec f, vec &result) const = 0;
+
+  virtual vec vec_homogenize(const FreeModule *F,
+                     const vec f,
+                     int v,
+                     int deg,
+                     M2_arrayint wts) const = 0;
+  virtual vec vec_homogenize(const FreeModule *F,
+                     const vec f,
+                     int v,
+                     M2_arrayint wts) const = 0;
+  virtual void vec_degree_weights(const FreeModule *F,
+                          const vec f,
+                          M2_arrayint wts,
+                          int &lo,
+                          int &hi) const = 0;
 };
 
 template <typename Derived>
@@ -558,6 +573,21 @@ public:
   vec vec_divide_by_given_content(vec f, ring_elem c) const override;
   vec vec_divide_by_content(vec f) const override;
   ring_elem vec_split_off_content(vec f, vec &result) const override;
+
+  vec vec_homogenize(const FreeModule *F,
+                     const vec f,
+                     int v,
+                     int deg,
+                     M2_arrayint wts) const override;
+  vec vec_homogenize(const FreeModule *F,
+                     const vec f,
+                     int v,
+                     M2_arrayint wts) const override;
+  void vec_degree_weights(const FreeModule *F,
+                          const vec f,
+                          M2_arrayint wts,
+                          int &lo,
+                          int &hi) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion

@@ -20,6 +20,7 @@ const Ring* get_ring(const FreeModule* F)
   return F->get_ring();
 }
 int rank(const FreeModule* F) { return F->rank(); }
+int primary_degree(const FreeModule* F, int d) { return  F->primary_degree(d); }
 
 }  // M2::bugfix
 
