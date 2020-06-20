@@ -34,46 +34,6 @@ void Ring::initialize_ring(long P0,
 }
 
 
-//ring_elem Ring::power(const ring_elem gg, int n) const
-//{
-//  ring_elem ff = gg;
-//  if (n == 0) return one();
-//  if (n < 0)
-//    {
-//      n = -n;
-//      ff = invert(ff);
-//      if (is_zero(ff))
-//        {
-//          ERROR("negative power of noninvertible element requested");
-//          return ff;
-//        }
-//    }
-//
-//  // The exponent 'n' should be > 0 here.
-//  ring_elem prod = from_long(1);
-//  ring_elem base = copy(ff);
-//  ring_elem tmp;
-//
-//  for (;;)
-//    {
-//      if ((n % 2) != 0)
-//        {
-//          tmp = mult(prod, base);
-//          prod = tmp;
-//        }
-//      n >>= 1;
-//      if (n == 0)
-//        {
-//          return prod;
-//        }
-//      else
-//        {
-//          tmp = mult(base, base);
-//          base = tmp;
-//        }
-//    }
-//}
-
 ///////////////////////////////////
 // SumCollector: default version //
 ///////////////////////////////////
