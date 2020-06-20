@@ -98,8 +98,7 @@ public:
   /* Polynomial routines.  These all set an error if the ring is not
      a polynomial ring.  OR, they will be moved to polyring.hpp  */
 
-  // Some divisibility routines
-  vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const;
+
 
   bool vec_is_homogeneous(const FreeModule *F, const vec f) const;
 };

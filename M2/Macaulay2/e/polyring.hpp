@@ -403,6 +403,7 @@ class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRin
   // is ignored).
 
   bool vec_is_scalar_multiple(vec f, vec g) const override;
+  vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const override;
 };
 
 /**

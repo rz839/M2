@@ -82,30 +82,6 @@ bool check_nterm_multiples(const PolyRing *R,
 }
 }  // M2::bugfix
 
-vec Ring::vec_remove_monomial_factors(vec f, bool make_squarefree_only) const
-{
-  const PolynomialRing *PR = cast_to_PolynomialRing();
-  if (PR == 0) return copy_vec(f);
-  if (f == 0) return 0;
-
-  int *exp = newarray_atomic(int, PR->n_vars());
-
-  Nterm *t = f->coeff;
-  PR->getMonoid()->to_expvector(t->monom, exp);  // Get the process started
-
-  for (vec a = f; a != NULL; a = a->next) monomial_divisor(a->coeff, exp);
-
-  if (make_squarefree_only)
-    // Now divide each term by exp[i]-1, if exp[i] >= 2
-    for (int i = 0; i < PR->n_vars(); i++)
-      if (exp[i] >= 1) exp[i]--;
-
-  vec result = vec_divide_by_expvector(exp, f);
-
-  deletearray(exp);
-  return result;
-}
-
 // Local Variables:
 // compile-command: "make -C $M2BUILDDIR/Macaulay2/e "
 // indent-tabs-mode: nil

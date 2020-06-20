@@ -871,3 +871,11 @@ bool RingBase<D>::vec_is_scalar_multiple(vec f, vec g) const
   const PolynomialRing *PR = cast_to_PolynomialRing();
   return PR == nullptr;
 }
+
+template <typename D>
+vec RingBase<D>::vec_remove_monomial_factors(vec f, bool make_squarefree_only) const
+{
+  const PolynomialRing *PR = cast_to_PolynomialRing();
+  if (PR == 0) return copy_vec(f);
+  return 0;
+}

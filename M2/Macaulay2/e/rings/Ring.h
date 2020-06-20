@@ -363,6 +363,8 @@ public:
   virtual bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const = 0;
 
   virtual bool vec_is_scalar_multiple(vec f, vec g) const = 0;  // is cf = dg, some scalars c,d? (not both zero).
+  // Some divisibility routines
+  virtual vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const = 0;
 };
 
 template <typename Derived>
@@ -596,6 +598,9 @@ public:
   bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const override;
 
   bool vec_is_scalar_multiple(vec f, vec g) const override;
+
+  // Some divisibility routines
+  vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion
