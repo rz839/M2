@@ -92,54 +92,8 @@ public:
   // These routines are implemented in ring-vec.cpp
   //////////////////////////////////////////
 
-
-
-
-
-
-
-
- public:
-
-  bool get_entry(const vecterm *v, int r, ring_elem &result) const;
-  ring_elem get_entry(vec v, int r) const;
-  vec sub_vector(const vecterm *v, M2_arrayint r) const;
-  int n_nonzero_terms(const vecterm *v) const;
-  void vec_text_out(buffer &o,
-                    const vecterm *v,
-                    bool p_one = true,
-                    bool p_plus = false,
-                    bool p_parens = false) const;
-
-
-  virtual vec vec_lead_term(int nparts, const FreeModule *F, vec v) const;
-
-  vec negate_vec(vec v) const;
-  vec add_vec(vec v, vec w) const;
-  vec subtract_vec(vec v, vec w) const;
-  vec mult_vec(int n, vec v) const;
-  vec mult_vec(const ring_elem f, const vec w) const;
-  vec rightmult_vec(const vec w, const ring_elem f) const;
-
-  void set_entry(vec &v, int i, ring_elem r) const;
-  void mult_vec_to(vec &v,
-                   const ring_elem r,
-                   bool opposite_mult) const;  // multiplies v <- r * v or v * r
-  void mult_row(vec &v, const ring_elem r, int i, bool opposite_mult) const;
-  void negate_vec_to(vec &v) const;            // v <- -v.
-  void subtract_vec_to(vec &v, vec &w) const;  // v <- v-w, w is set to 0.
-
-  vec mult_vec_matrix(const Matrix *m, vec v, bool opposite_mult) const;
-
-  vec component_shift(int n, vec v) const;
-
-  vec tensor_shift(int n, int m, vec v) const;
-
+public:
   vec tensor(const FreeModule *F, vec v, const FreeModule *G, vec w) const;
-
-  void divide_vec_to(vec &v, const ring_elem a) const;
-  void divide_row(vec &v, int r, const ring_elem a) const;
-  ring_elem dot_product(const vecterm *v, const vecterm *w) const;
 
   /* Polynomial routines.  These all set an error if the ring is not
      a polynomial ring.  OR, they will be moved to polyring.hpp  */

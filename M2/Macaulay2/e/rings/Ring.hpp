@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Ring.h"
+#include "base/bugfix.h"
 
 template <typename D>
 const Monoid* RingBase<D>::degree_monoid() const
@@ -308,4 +309,402 @@ vec RingBase<D>::vec_zeroize_tiny(gmp_RR epsilon, const vec v) const
     }
   result->next = 0;
   return head.next;
+}
+
+template <typename D>
+bool RingBase<D>::get_entry(const vecterm *v, int r, ring_elem &result) const
+{
+  for (const vecterm *p = v; p != 0; p = p->next)
+    if (p->comp < r)
+      break;
+    else if (p->comp == r)
+      {
+        result = p->coeff;
+        return true;
+      }
+  return false;
+}
+
+template <typename D>
+ring_elem RingBase<D>::get_entry(vec v, int r) const
+{
+  while (v != NULL)
+    {
+      if (v->comp == r) return v->coeff;
+      if (v->comp < r) return from_long(0);
+      v = v->next;
+    }
+  return from_long(0);
+}
+
+template <typename D>
+int RingBase<D>::n_nonzero_terms(const vecterm *v) const
+{
+  int result = 0;
+  for (; v != NULL; v = v->next) result++;
+  return result;
+}
+
+template <typename D>
+vec RingBase<D>::negate_vec(vec v) const
+{
+  vecterm result;
+  vecterm *b = &result;
+  for (vecterm *a = v; a != NULL; a = a->next)
+    {
+      b->next = make_vec(a->comp, negate(a->coeff));
+      b = b->next;
+    }
+  b->next = NULL;
+  return result.next;
+}
+
+template <typename D>
+vec RingBase<D>::add_vec(vec v, vec w) const
+{
+  vec f = copy_vec(v);
+  vec g = copy_vec(w);
+  add_vec_to(f, g);
+  return f;
+}
+
+template <typename D>
+vec RingBase<D>::subtract_vec(vec v, vec w) const
+{
+  vec f = copy_vec(v);
+  vec g = negate_vec(w);
+  add_vec_to(f, g);
+  return f;
+}
+
+template <typename D>
+vec RingBase<D>::mult_vec(int n, vec v) const
+{
+  ring_elem f = from_long(n);
+  vec result = mult_vec(f, v);
+  return result;
+}
+
+template <typename D>
+vec RingBase<D>::mult_vec(const ring_elem f, const vec w) const
+{
+  if (is_zero(f)) return NULL;
+  vecterm head;
+  vec result = &head;
+  for (vec v = w; v != 0; v = v->next)
+    {
+      ring_elem a = mult(f, v->coeff);
+      if (!is_zero(a))
+        {
+          vec t = make_vec(v->comp, a);
+          result->next = t;
+          result = t;
+        }
+    }
+  result->next = NULL;
+  return head.next;
+}
+
+template <typename D>
+vec RingBase<D>::rightmult_vec(const vec w, const ring_elem f) const
+{
+  if (is_zero(f)) return NULL;
+  vecterm head;
+  vec result = &head;
+  for (vec v = w; v != 0; v = v->next)
+    {
+      ring_elem a = mult(v->coeff, f);
+      if (!is_zero(a))
+        {
+          vec t = make_vec(v->comp, a);
+          result->next = t;
+          result = t;
+        }
+    }
+  result->next = NULL;
+  return head.next;
+}
+
+template <typename D>
+vec RingBase<D>::sub_vector(const vecterm *v, M2_arrayint r) const
+{
+  if (v == 0) return 0;
+  // Largest component which occurs in v occurs first.
+  VECTOR(int) trans(v->comp + 1);
+  for (int i = 0; i < v->comp; i++) trans.push_back(-1);
+
+  for (unsigned j = 0; j < r->len; j++)
+    if (r->array[j] >= 0 && r->array[j] <= v->comp) trans[r->array[j]] = j;
+
+  vecterm head;
+  vecterm *result = &head;
+  for (; v != NULL; v = v->next)
+    if (trans[v->comp] != -1)
+      {
+        result->next = new_vec();
+        result = result->next;
+        result->next = 0;
+        result->coeff = v->coeff;
+        result->comp = trans[v->comp];
+      }
+  result->next = NULL;
+  result = head.next;
+
+  vec_sort(result);
+  return result;
+}
+
+template <typename D>
+vec RingBase<D>::component_shift(int n, vec v) const
+{
+  vecterm head;
+  vec result = &head;
+  for (const vecterm *p = v; p != 0; p = p->next)
+    {
+      vec w = new_vec();
+      result->next = w;
+      result = w;
+      w->comp = p->comp + n;
+      w->coeff = p->coeff;  // copy is not done
+    }
+  result->next = 0;
+  return head.next;
+}
+
+template <typename D>
+vec RingBase<D>::tensor_shift(int n, int m, vec v) const
+{
+  vecterm head;
+  vecterm *result = &head;
+
+  for (; v != NULL; v = v->next)
+    {
+      vec w = new_vec();
+      result->next = w;
+      result = w;
+      w->comp = n * v->comp + m;
+      w->coeff = v->coeff;  // copy is not done
+    }
+  result->next = NULL;
+  return head.next;
+}
+
+template <typename D>
+void RingBase<D>::vec_text_out(buffer &o,
+                        const vecterm *v,
+                        bool p_one,
+                        bool p_plus,
+                        bool p_parens) const
+{
+  if (v == NULL)
+    {
+      o << "0";
+      return;
+    }
+
+  p_one = false;
+  for (const vecterm *t = v; t != NULL; t = t->next)
+    {
+      this->elem_text_out(o, t->coeff, p_one, p_plus, p_parens);
+      o << "<" << t->comp << ">";
+      p_plus = true;
+    }
+}
+
+///////////////////////////////////////
+// Routines which modify a vec ////////
+///////////////////////////////////////
+
+template <typename D>
+void RingBase<D>::mult_vec_to(vec &v, const ring_elem r, bool opposite_mult) const
+{
+  if (this->is_zero(r))
+    {
+      remove_vec(v);
+      v = 0;
+      return;
+    }
+  vecterm head;
+  head.next = v;
+  vec p = &head;
+  while (p->next != 0)
+    {
+      // old version: this->mult_to(p->next->coeff, a);
+      ring_elem c;
+      if (opposite_mult)
+        c = this->mult(p->next->coeff, r);
+      else
+        c = this->mult(r, p->next->coeff);
+      p->next->coeff = c;
+      if (this->is_zero(p->next->coeff))
+        {
+          vec tmp = p->next;
+          p->next = tmp->next;
+          remove_vec_node(tmp);
+        }
+      else
+        p = p->next;
+    }
+  v = head.next;
+}
+
+template <typename D>
+void RingBase<D>::mult_row(vec &v, const ring_elem r, int i, bool opposite_mult) const
+{
+  vecterm head;
+  head.next = v;
+  for (vec p = &head; p->next != 0; p = p->next)
+    if (p->next->comp < i)
+      break;
+    else if (p->next->comp == i)
+      {
+        ring_elem c;
+        if (opposite_mult)
+          c = mult(p->next->coeff, r);
+        else
+          c = mult(r, p->next->coeff);
+        p->next->coeff = c;
+        if (this->is_zero(p->next->coeff))
+          {
+            vec tmp = p->next;
+            p->next = tmp->next;
+            remove_vec_node(tmp);
+          }
+        break;
+      }
+  v = head.next;
+}
+
+template <typename D>
+void RingBase<D>::divide_vec_to(vec &v, const ring_elem a) const
+{
+  if (this->is_zero(a))
+    {
+      remove_vec(v);
+      v = 0;
+    }
+  vecterm head;
+  head.next = v;
+  vec p = &head;
+  while (p->next != 0)
+    {
+      // old version: this->mult_to(p->next->coeff, a);
+      ring_elem c =
+          this->divide(p->next->coeff, a);  // exact or quotient?? MES MES
+      p->next->coeff = c;
+      if (this->is_zero(p->next->coeff))
+        {
+          vec tmp = p->next;
+          p->next = tmp->next;
+          remove_vec_node(tmp);
+        }
+      else
+        p = p->next;
+    }
+  v = head.next;
+}
+
+template <typename D>
+void RingBase<D>::divide_row(vec &v, int r, const ring_elem a) const
+{
+  vecterm head;
+  head.next = v;
+  for (vec p = &head; p->next != 0; p = p->next)
+    if (p->next->comp < r)
+      break;
+    else if (p->next->comp == r)
+      {
+        ring_elem c =
+            this->divide(p->next->coeff, a);  // exact or quotient?? MES MES
+        p->next->coeff = c;
+        if (this->is_zero(p->next->coeff))
+          {
+            vec tmp = p->next;
+            p->next = tmp->next;
+            remove_vec_node(tmp);
+          }
+        break;
+      }
+}
+
+template <typename D>
+void RingBase<D>::negate_vec_to(vec &v) const
+{
+  vec w = v;
+  while (w != NULL)
+    {
+      negate_to(w->coeff);
+      w = w->next;
+    }
+}
+
+template <typename D>
+void RingBase<D>::subtract_vec_to(vec &v, vec &w) const
+{
+  negate_vec_to(w);
+  add_vec_to(v, w);
+}
+
+template <typename D>
+ring_elem RingBase<D>::dot_product(const vecterm *v, const vecterm *w) const
+{
+  ring_elem result = this->from_long(0);
+  while (true)
+    {
+      if (v == 0) return result;
+      if (w == 0) return result;
+      if (v->comp > w->comp)
+        v = v->next;
+      else if (v->comp < w->comp)
+        w = w->next;
+      else
+        {
+          ring_elem a = this->mult(v->coeff, w->coeff);
+          result = this->add(result, a);
+          v = v->next;
+          w = w->next;
+        }
+    }
+}
+
+template <typename D>
+void RingBase<D>::set_entry(vec &v, int r, ring_elem a) const
+{
+  vec p;
+  bool iszero = this->is_zero(a);
+  vecterm head;
+  head.next = v;
+  for (p = &head; p->next != 0; p = p->next)
+    if (p->next->comp <= r) break;
+
+  if (p->next == 0 || p->next->comp < r)
+    {
+      if (iszero) return;
+      vec w = new_vec();
+      w->next = p->next;
+      w->comp = r;
+      w->coeff = a;
+      p->next = w;
+    }
+  else if (p->next->comp == r)
+    {
+      if (iszero)
+        {
+          // delete node
+          vec tmp = p->next;
+          p->next = tmp->next;
+          remove_vec_node(tmp);
+        }
+      else
+        p->next->coeff = a;
+    }
+  v = head.next;
+}
+
+template <typename D>
+vec RingBase<D>::vec_lead_term(int nparts, const FreeModule *F, vec v) const
+{
+  // May be over-ridden by subclasses.  In particular, by polynomial classes.
+  if (v == 0) return 0;
+  return make_vec(v->comp, v->coeff);
 }

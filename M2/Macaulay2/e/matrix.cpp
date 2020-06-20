@@ -644,8 +644,27 @@ Matrix *Matrix::mult(const Matrix *m, bool opposite_mult) const
   degree_monoid()->remove(deg);
 
   for (int i = 0; i < m->n_cols(); i++)
-    mat.set_column(i, R->mult_vec_matrix(this, m->elem(i), opposite_mult));
+    mat.set_column(i, mult_vec_matrix(m->elem(i), opposite_mult));
   return mat.to_matrix();
+}
+
+vec Matrix::mult_vec_matrix(vec v, bool opposite_mult) const
+{
+  // Multiply m * v, using left or right mult for each scalar mult.
+
+  // Each loop below should read
+  // result = 0
+  // for each non-zero term f e[component] of the vector v
+  //    result += f M[v]
+  const Ring *R = get_ring();
+  vec result = NULL;
+  for (; v != NULL; v = v->next)
+  {
+    vec w = R->copy_vec(this->elem(v->comp));
+    R->mult_vec_to(w, v->coeff, !opposite_mult);
+    R->add_vec_to(result, w);
+  }
+  return result;
 }
 
 Matrix *Matrix::module_tensor(const Matrix *m) const

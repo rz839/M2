@@ -211,6 +211,7 @@ class Matrix : public EngineObject
 
  private:
   void minimal_lead_terms_ZZ(intarray &result) const;
+  vec mult_vec_matrix(vec v, bool opposite_mult) const;
 
  public:
   void minimal_lead_terms(intarray &result) const;

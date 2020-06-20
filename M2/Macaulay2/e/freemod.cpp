@@ -15,8 +15,13 @@ FreeModule* new_FreeModule(const Ring* R, int n, bool has_schreyer)
 {
   return new FreeModule(R, n, has_schreyer);
 }
-
+const Ring* get_ring(const FreeModule* F)
+{
+  return F->get_ring();
 }
+int rank(const FreeModule* F) { return F->rank(); }
+
+}  // M2::bugfix
 
 
 //////////////////////////////////////////////

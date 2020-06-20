@@ -16,6 +16,10 @@
 // GEOHEAP_SIZE: defined in style.hpp
 // heap_size: defined in object.cpp
 
+#pragma once
+
+#include "base/bugfix.h"
+
 class vecHeap
 {
   const FreeModule *F;  // Our elements will be vectors in here
@@ -46,7 +50,7 @@ class vecHeap
 };
 
 inline vecHeap::vecHeap(const FreeModule *FF)
-    : F(FF), K(FF->get_ring()), top_of_heap(-1), mLead(-1)
+    : F(FF), K(M2::bugfix::get_ring(FF)), top_of_heap(-1), mLead(-1)
 {
   // set K
   int i;

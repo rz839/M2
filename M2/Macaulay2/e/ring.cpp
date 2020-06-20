@@ -5,10 +5,7 @@
 #include "aring-CCC.hpp"
 #include "monoid.hpp"
 #include "poly.hpp"
-
-namespace M2::bugfix {
-FreeModule* new_FreeModule(const Ring* R, int n, bool has_schreyer);
-}
+#include "base/bugfix.h"
 
 RingZZ *makeIntegerRing() { return new RingZZ; }
 
