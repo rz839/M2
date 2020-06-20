@@ -6,11 +6,6 @@
 #include "monoid.hpp"
 #include "poly.hpp"
 
-//#include "freemod.hpp"
-#include "coeffrings.hpp"
-
-
-
 namespace M2::bugfix {
 FreeModule* new_FreeModule(const Ring* R, int n, bool has_schreyer);
 }

@@ -58,6 +58,9 @@ public:
   using Base = RingBase<Ring>;
 
 protected:
+  // this is poorly written, as so much else;
+  // you only really call this from other derived (general) rings further down
+  // the inheritance, so move it to RingBase<D>
   void initialize_ring(long charac,
                        const PolynomialRing *DR = nullptr,
                        const M2_arrayint heft_vec = nullptr);
@@ -71,17 +74,10 @@ public:
   //   Other Methods (used for specific rings)
   // ---------------------------------------------------------------------------
 
-  virtual MutableMatrix *makeMutableMatrix(size_t nrows,
-                                           size_t ncols,
-                                           bool dense) const
-  {
-    return 0;
-  }
-
+  virtual MutableMatrix *makeMutableMatrix(size_t nrows, size_t ncols, bool dense) const { return nullptr; }
   virtual FreeModule *make_FreeModule() const;
   virtual FreeModule *make_Schreyer_FreeModule() const;
   virtual FreeModule *make_FreeModule(int n) const;
-
   virtual SumCollector *make_SumCollector() const;
 
 
