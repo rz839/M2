@@ -278,3 +278,34 @@ ring_elem RingBase<D>::remainderAndQuotient(const ring_elem f,
   quot = crtp()->divide(f, g);
   return crtp()->zero();
 }
+
+template <typename D>
+void RingBase<D>::vec_increase_maxnorm(gmp_RRmutable norm, const vec v) const
+// If any real number appearing in f has larger absolute value than norm,
+// replace norm.
+// Default for rings not over RRR or CCC is to do nothing.
+{
+  for (const vecterm *p = v; p != 0; p = p->next)
+    increase_maxnorm(norm, p->coeff);
+}
+
+template <typename D>
+vec RingBase<D>::vec_zeroize_tiny(gmp_RR epsilon, const vec v) const
+{
+  vecterm head;
+  vec result = &head;
+  for (const vecterm *p = v; p != 0; p = p->next)
+    {
+      ring_elem a = zeroize_tiny(epsilon, p->coeff);
+      if (!is_zero(a))
+        {
+          vec w = new_vec();
+          result->next = w;
+          result = w;
+          w->comp = p->comp;
+          w->coeff = a;
+        }
+    }
+  result->next = 0;
+  return head.next;
+}

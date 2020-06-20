@@ -481,6 +481,14 @@ protected:
   void remove_vec_node(vec n) const;
 
 public:
+  vec vec_zeroize_tiny(gmp_RR epsilon, const vec f) const;
+  // If any real number appearing in f has larger absolute value than norm,
+  // replace norm.
+  // Default for rings not over RRR or CCC is to do nothing.
+  // Default for rings not over RRR or CCC is to do nothing.
+  void vec_increase_maxnorm(gmp_RRmutable norm, const vec f) const;
+
+
   void vec_sort(vecterm *&f) const;
 
   int compare_vecs(vec v, vec w) const;

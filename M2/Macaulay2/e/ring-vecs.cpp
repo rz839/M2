@@ -181,11 +181,11 @@ vec Ring::tensor(const FreeModule *F, vec v, const FreeModule *G, vec w) const
 {
   vecHeap H(F);
   for (; v != NULL; v = v->next)
-    {
-      vec w1 = component_shift(v->comp * G->rank(), w);
-      mult_vec_to(w1, v->coeff, false);
-      H.add(w1);
-    }
+  {
+    vec w1 = component_shift(v->comp * G->rank(), w);
+    mult_vec_to(w1, v->coeff, false);
+    H.add(w1);
+  }
   return H.value();
 }
 
@@ -210,34 +210,6 @@ void Ring::vec_text_out(buffer &o,
     }
 }
 
-vec Ring::vec_zeroize_tiny(gmp_RR epsilon, const vec v) const
-{
-  vecterm head;
-  vec result = &head;
-  for (const vecterm *p = v; p != 0; p = p->next)
-    {
-      ring_elem a = zeroize_tiny(epsilon, p->coeff);
-      if (!is_zero(a))
-        {
-          vec w = new_vec();
-          result->next = w;
-          result = w;
-          w->comp = p->comp;
-          w->coeff = a;
-        }
-    }
-  result->next = 0;
-  return head.next;
-}
-
-void Ring::vec_increase_maxnorm(gmp_RRmutable norm, const vec v) const
-// If any real number appearing in f has larger absolute value than norm,
-// replace norm.
-// Default for rings not over RRR or CCC is to do nothing.
-{
-  for (const vecterm *p = v; p != 0; p = p->next)
-    increase_maxnorm(norm, p->coeff);
-}
 ///////////////////////////////////////
 // Routines which modify a vec ////////
 ///////////////////////////////////////
