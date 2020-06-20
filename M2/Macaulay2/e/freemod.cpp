@@ -9,6 +9,16 @@
 #include "Eschreyer.hpp"
 #include "gbring.hpp"
 
+namespace M2::bugfix {
+
+FreeModule* new_FreeModule(const Ring* R, int n, bool has_schreyer)
+{
+  return new FreeModule(R, n, has_schreyer);
+}
+
+}
+
+
 //////////////////////////////////////////////
 //  Construction/Destruction routines ////////
 //////////////////////////////////////////////

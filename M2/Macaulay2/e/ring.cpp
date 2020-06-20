@@ -6,8 +6,14 @@
 #include "monoid.hpp"
 #include "poly.hpp"
 
-#include "freemod.hpp"
+//#include "freemod.hpp"
 #include "coeffrings.hpp"
+
+
+
+namespace M2::bugfix {
+FreeModule* new_FreeModule(const Ring* R, int n, bool has_schreyer);
+}
 
 RingZZ *makeIntegerRing() { return new RingZZ; }
 
@@ -37,17 +43,17 @@ void Ring::initialize_ring(long P0,
 
 FreeModule *Ring::make_FreeModule() const
 {
-  return new FreeModule(this, 0, false);
+  return M2::bugfix::new_FreeModule(this, 0, false);
 }
 
 FreeModule *Ring::make_Schreyer_FreeModule() const
 {
-  return new FreeModule(this, 0, true);
+  return M2::bugfix::new_FreeModule(this, 0, true);
 }
 
 FreeModule *Ring::make_FreeModule(int n) const
 {
-  return new FreeModule(this, n, false);
+  return M2::bugfix::new_FreeModule(this, n, false);
 }
 
 //ring_elem Ring::power(const ring_elem gg, int n) const
