@@ -248,9 +248,30 @@ Matrix /* or null */ *RingMap::eval(const FreeModule *F, const Matrix *m) const
 {
   MatrixConstructor mat(F, 0);
   for (int i = 0; i < m->n_cols(); i++)
-    mat.append(m->get_ring()->vec_eval(this, F, m->elem(i)));
+    mat.append(eval_vec(m->get_ring(), F, m->elem(i)));
   if (error()) return nullptr;
   return mat.to_matrix();
+}
+
+vec RingMap::eval_vec(const Ring *R, const FreeModule *F, const vec v) const
+// v is a vector over 'this'
+{
+  const Ring *targetRing = get_ring();
+
+  vecterm head;
+  vec result = &head;
+
+  for (vec t = v; t != 0; t = t->next)
+  {
+    ring_elem a = R->eval(this, t->coeff, 0);  // a is now in the target ring
+    if (!targetRing->is_zero(a))
+    {
+      result->next = targetRing->make_vec(t->comp, a);
+      result = result->next;
+    }
+  }
+  result->next = 0;
+  return head.next;
 }
 
 // Local Variables:

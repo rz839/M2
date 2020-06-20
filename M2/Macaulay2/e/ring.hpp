@@ -116,7 +116,7 @@ public:
                     bool p_one = true,
                     bool p_plus = false,
                     bool p_parens = false) const;
-  vec vec_eval(const RingMap *map, const FreeModule *F, const vec v) const;
+
 
   virtual vec vec_lead_term(int nparts, const FreeModule *F, vec v) const;
 

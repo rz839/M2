@@ -210,27 +210,6 @@ void Ring::vec_text_out(buffer &o,
     }
 }
 
-vec Ring::vec_eval(const RingMap *map, const FreeModule *F, const vec v) const
-// v is a vector over 'this'
-{
-  const Ring *targetRing = map->get_ring();
-
-  vecterm head;
-  vec result = &head;
-
-  for (vec t = v; t != 0; t = t->next)
-    {
-      ring_elem a = eval(map, t->coeff, 0);  // a is now in the target ring
-      if (!targetRing->is_zero(a))
-        {
-          result->next = targetRing->make_vec(t->comp, a);
-          result = result->next;
-        }
-    }
-  result->next = 0;
-  return head.next;
-}
-
 vec Ring::vec_zeroize_tiny(gmp_RR epsilon, const vec v) const
 {
   vecterm head;

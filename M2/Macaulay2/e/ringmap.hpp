@@ -66,6 +66,7 @@ class RingMap : public EngineObject
 
   RingElement /* or null */ *eval(const RingElement *r) const;
   Matrix /* or null */ *eval(const FreeModule *newrows, const Matrix *m) const;
+  vec eval_vec(const Ring *R, const FreeModule *F, const vec v) const;
 
   void text_out(buffer &o) const;
 };
