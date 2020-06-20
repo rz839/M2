@@ -709,3 +709,48 @@ vec RingBase<D>::vec_lead_term(int nparts, const FreeModule *F, vec v) const
   return make_vec(v->comp, v->coeff);
 }
 
+template <typename D>
+ring_elem RingBase<D>::vec_content(vec f) const
+{
+  if (f == 0) return zero();
+  ring_elem c = content(f->coeff);
+  for (vec t = f->next; t != 0; t = t->next) lower_content(c, t->coeff);
+  return c;
+}
+
+template <typename D>
+vec RingBase<D>::vec_divide_by_given_content(vec f, ring_elem c) const
+{
+  if (f == 0) return 0;
+  vecterm head;
+  vec result = &head;
+  for (const vecterm *p = f; p != 0; p = p->next)
+    {
+      vec w = new_vec();
+      result->next = w;
+      result = w;
+      w->comp = p->comp;
+      w->coeff = divide_by_given_content(p->coeff, c);
+    }
+  result->next = 0;
+  return head.next;
+}
+
+template <typename D>
+vec RingBase<D>::vec_divide_by_content(vec f) const
+{
+  if (f == 0) return 0;
+  ring_elem c = vec_content(f);
+  return vec_divide_by_given_content(f, c);
+}
+
+template <typename D>
+ring_elem RingBase<D>::vec_split_off_content(vec f, vec &result) const
+{
+  ring_elem c = vec_content(f);
+  if (f == 0)
+    result = 0;
+  else
+    result = vec_divide_by_given_content(f, c);
+  return c;
+}

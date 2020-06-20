@@ -122,11 +122,6 @@ public:
                      const vec f,
                      int v,
                      M2_arrayint wts) const;
-
-  ring_elem vec_content(vec f) const;
-  vec vec_divide_by_given_content(vec f, ring_elem c) const;
-  vec vec_divide_by_content(vec f) const;
-  ring_elem vec_split_off_content(vec f, vec &result) const;
 };
 
 class SumCollector : public our_new_delete

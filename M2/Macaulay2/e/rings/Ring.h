@@ -339,6 +339,11 @@ public:
   virtual void vec_degree_of_var(int n, const vec v, int &lo, int &hi) const { M2_BAD_LEVEL }
   virtual vec vec_divide_by_var(int n, int d, const vec v) const { M2_BAD_LEVEL }
   virtual vec vec_divide_by_expvector(const int *exp, const vec v) const { M2_BAD_LEVEL }
+
+  virtual ring_elem vec_content(vec f) const = 0;
+  virtual vec vec_divide_by_given_content(vec f, ring_elem c) const = 0;
+  virtual vec vec_divide_by_content(vec f) const = 0;
+  virtual ring_elem vec_split_off_content(vec f, vec &result) const = 0;
 };
 
 template <typename Derived>
@@ -549,6 +554,10 @@ public:
   void divide_row(vec &v, int r, const ring_elem a) const;
   ring_elem dot_product(const vecterm *v, const vecterm *w) const;
 
+  ring_elem vec_content(vec f) const override;
+  vec vec_divide_by_given_content(vec f, ring_elem c) const override;
+  vec vec_divide_by_content(vec f) const override;
+  ring_elem vec_split_off_content(vec f, vec &result) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion
