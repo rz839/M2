@@ -216,6 +216,93 @@ unsigned int PolynomialRing::computeHashValue(const ring_elem a) const
   return hash;
 }
 
+vec PolynomialRing::vec_diff(vec v, int rankFw, vec w, int use_coeff) const
+// rankFw is the rank of the free module corresponding to w.
+{
+  vec result = NULL;
+  for (; v != NULL; v = v->next)
+    for (vecterm *p = w; p != NULL; p = p->next)
+      {
+        ring_elem a = diff(v->coeff, p->coeff, use_coeff);
+        if (is_zero(a))
+          {
+            remove(a);
+            continue;
+          }
+        vecterm *t = new_vec();
+        t->comp = rankFw * v->comp + p->comp;
+        t->coeff = a;
+        t->next = result;
+        result = t;
+      }
+  vec_sort(result);
+  return result;
+}
+
+int PolynomialRing::vec_in_subring(int nslots, const vec v) const
+{
+  const PolynomialRing *PR = cast_to_PolynomialRing();
+  if (PR == 0 || v == NULL) return true;
+  const Monoid *M = PR->getMonoid();
+  for (vec w = v; w != NULL; w = w->next)
+    if (!M->in_subring(nslots, PR->lead_flat_monomial(w->coeff))) return false;
+  return true;
+}
+
+void PolynomialRing::vec_degree_of_var(int n, const vec v, int &lo, int &hi) const
+{
+  if (v == NULL)
+    {
+      ERROR("attempting to find degree of zero vector");
+      return;
+    }
+  degree_of_var(n, v->coeff, lo, hi);
+  for (vec w = v->next; w != 0; w = w->next)
+    {
+      int lo1, hi1;
+      degree_of_var(n, w->coeff, lo1, hi1);
+      if (lo1 < lo) lo = lo1;
+      if (hi1 > hi) hi = hi1;
+    }
+}
+
+vec PolynomialRing::vec_divide_by_var(int n, int d, const vec v) const
+{
+  vecterm head;
+  vecterm *result = &head;
+  for (vec w = v; w != 0; w = w->next)
+    {
+      ring_elem a = divide_by_var(n, d, w->coeff);
+      if (!is_zero(a))
+        {
+          vec t = make_vec(w->comp, a);
+          result->next = t;
+          result = t;
+        }
+    }
+  result->next = 0;
+  return head.next;
+}
+
+vec PolynomialRing::vec_divide_by_expvector(const int *exp, const vec v) const
+{
+  vecterm head;
+  vecterm *result = &head;
+  for (vec w = v; w != 0; w = w->next)
+    {
+      ring_elem a = divide_by_expvector(exp, w->coeff);
+      if (!is_zero(a))
+        {
+          vec t = make_vec(w->comp, a);
+          result->next = t;
+          result = t;
+        }
+    }
+  result->next = 0;
+  return head.next;
+}
+
+
 // Local Variables:
 // compile-command: "make -C $M2BUILDDIR/Macaulay2/e "
 // indent-tabs-mode: nil

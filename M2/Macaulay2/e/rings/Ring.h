@@ -21,6 +21,8 @@ class SolvableAlgebra;
 class RRR;
 class CCC;
 
+#define M2_BAD_LEVEL throw exc::engine_error("not implemented at this level");
+
 class IRing
 {
 public:
@@ -328,6 +330,15 @@ public:
   // replace norm.
   virtual void increase_maxnorm(gmp_RRmutable norm, const ring_elem f) const {};
   // Default is to return f itself.
+
+  /* Polynomial routines.  These all set an error if the ring is not
+     a polynomial ring.  OR, they will be moved to polyring.hpp  */
+
+  virtual vec vec_diff(vec v, int rankFw, vec w, int use_coeff) const { M2_BAD_LEVEL }
+  virtual int vec_in_subring(int n, const vec v) const { M2_BAD_LEVEL }
+  virtual void vec_degree_of_var(int n, const vec v, int &lo, int &hi) const { M2_BAD_LEVEL }
+  virtual vec vec_divide_by_var(int n, int d, const vec v) const { M2_BAD_LEVEL }
+  virtual vec vec_divide_by_expvector(const int *exp, const vec v) const { M2_BAD_LEVEL }
 };
 
 template <typename Derived>

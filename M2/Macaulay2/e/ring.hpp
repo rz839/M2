@@ -97,11 +97,6 @@ public:
 
   /* Polynomial routines.  These all set an error if the ring is not
      a polynomial ring.  OR, they will be moved to polyring.hpp  */
-  vec vec_diff(vec v, int rankFw, vec w, int use_coeff) const;
-  int vec_in_subring(int n, const vec v) const;
-  void vec_degree_of_var(int n, const vec v, int &lo, int &hi) const;
-  vec vec_divide_by_var(int n, int d, const vec v) const;
-  vec vec_divide_by_expvector(const int *exp, const vec v) const;
 
   // Some divisibility routines
   bool vec_is_scalar_multiple(vec f, vec g)

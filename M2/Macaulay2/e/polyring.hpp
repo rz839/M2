@@ -357,6 +357,12 @@ class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRin
 
   virtual Nterm *numerator(ring_elem f) const = 0;
 
+  vec vec_diff(vec v, int rankFw, vec w, int use_coeff) const override;
+  int vec_in_subring(int n, const vec v) const override;
+  void vec_degree_of_var(int n, const vec v, int &lo, int &hi) const override;
+  vec vec_divide_by_var(int n, int d, const vec v) const override;
+  vec vec_divide_by_expvector(const int *exp, const vec v) const override;
+
  protected:
   void sort(Nterm *&f) const;
 

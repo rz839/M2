@@ -708,3 +708,4 @@ vec RingBase<D>::vec_lead_term(int nparts, const FreeModule *F, vec v) const
   if (v == 0) return 0;
   return make_vec(v->comp, v->coeff);
 }
+
