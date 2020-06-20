@@ -860,3 +860,14 @@ bool RingBase<D>::vec_multi_degree(const FreeModule *F, const vec f, int *degf) 
   degree_monoid()->remove(degv);
   return result;
 }
+
+template <typename D>
+bool RingBase<D>::vec_is_scalar_multiple(vec f, vec g) const
+// is df = cg, some scalars c,d?
+// These scalars are over the very bottom base field/ZZ.
+{
+  if (f == NULL) return true;
+  if (g == NULL) return true;
+  const PolynomialRing *PR = cast_to_PolynomialRing();
+  return PR == nullptr;
+}

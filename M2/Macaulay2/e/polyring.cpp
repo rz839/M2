@@ -302,6 +302,32 @@ vec PolynomialRing::vec_divide_by_expvector(const int *exp, const vec v) const
   return head.next;
 }
 
+bool PolynomialRing::vec_is_scalar_multiple(vec f, vec g) const
+// is df = cg, some scalars c,d?
+// These scalars are over the very bottom base field/ZZ.
+{
+  if (f == NULL) return true;
+  if (g == NULL) return true;
+  const PolynomialRing *PR = cast_to_PolynomialRing();
+  if (PR == 0) return true;
+  const PolyRing *PR1 = PR->getNumeratorRing();
+#ifdef DEVELOPMENT
+#warning "use numerator only"
+#endif
+  if (f->comp != g->comp) return false;
+  Nterm *f1 = f->coeff;
+  Nterm *g1 = g->coeff;
+  ring_elem c = f1->coeff;
+  ring_elem d = g1->coeff;
+  vec p, q;
+  for (p = f, q = g; p != NULL && q != NULL; p = p->next, q = q->next)
+    {
+      if (p->comp != q->comp) return 0;
+      if (!M2::bugfix::check_nterm_multiples(PR1, p->coeff, q->coeff, c, d)) return false;
+    }
+  return !p && !q;
+}
+
 
 // Local Variables:
 // compile-command: "make -C $M2BUILDDIR/Macaulay2/e "

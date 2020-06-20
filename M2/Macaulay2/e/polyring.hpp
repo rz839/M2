@@ -401,6 +401,8 @@ class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRin
   // denom should be an element of getDenominatorRing() (if non-NULL, otherwise
   // 'denom'
   // is ignored).
+
+  bool vec_is_scalar_multiple(vec f, vec g) const override;
 };
 
 /**

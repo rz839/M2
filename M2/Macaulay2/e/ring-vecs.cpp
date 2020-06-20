@@ -59,7 +59,8 @@ bool Ring::vec_is_homogeneous(const FreeModule *F, const vec f) const
 //                                    ////////
 //////////////////////////////////////////////
 
-bool static check_nterm_multiples(const PolyRing *R,
+namespace M2::bugfix {
+bool check_nterm_multiples(const PolyRing *R,
                                   ring_elem f1,  // in R
                                   ring_elem g1,  // in R
                                   ring_elem c,   // in flat coeffs of R
@@ -70,43 +71,16 @@ bool static check_nterm_multiples(const PolyRing *R,
   const Monoid *M = R->getMonoid();
   const Ring *K = R->getCoefficients();
   for (f = f1, g = g1; f != 0 && g != 0; f = f->next, g = g->next)
-    {
-      if (M->compare(f->monom, g->monom) != 0) return false;
-      ring_elem c1 = K->mult(c, g->coeff);
-      ring_elem d1 = K->mult(d, f->coeff);
-      int isequal = K->is_equal(c1, d1);
-      if (!isequal) return false;
-    }
-  if (f == NULL && g == NULL) return true;
-  return false;
+  {
+    if (M->compare(f->monom, g->monom) != 0) return false;
+    ring_elem c1 = K->mult(c, g->coeff);
+    ring_elem d1 = K->mult(d, f->coeff);
+    int isequal = K->is_equal(c1, d1);
+    if (!isequal) return false;
+  }
+  return !f && !g;
 }
-
-bool Ring::vec_is_scalar_multiple(vec f, vec g) const
-// is df = cg, some scalars c,d?
-// These scalars are over the very bottom base field/ZZ.
-{
-  if (f == NULL) return true;
-  if (g == NULL) return true;
-  const PolynomialRing *PR = cast_to_PolynomialRing();
-  if (PR == 0) return true;
-  const PolyRing *PR1 = PR->getNumeratorRing();
-#ifdef DEVELOPMENT
-#warning "use numerator only"
-#endif
-  if (f->comp != g->comp) return false;
-  Nterm *f1 = f->coeff;
-  Nterm *g1 = g->coeff;
-  ring_elem c = f1->coeff;
-  ring_elem d = g1->coeff;
-  vec p, q;
-  for (p = f, q = g; p != NULL && q != NULL; p = p->next, q = q->next)
-    {
-      if (p->comp != q->comp) return 0;
-      if (!check_nterm_multiples(PR1, p->coeff, q->coeff, c, d)) return false;
-    }
-  if (q == NULL && p == NULL) return true;
-  return false;
-}
+}  // M2::bugfix
 
 vec Ring::vec_remove_monomial_factors(vec f, bool make_squarefree_only) const
 {

@@ -99,8 +99,6 @@ public:
      a polynomial ring.  OR, they will be moved to polyring.hpp  */
 
   // Some divisibility routines
-  bool vec_is_scalar_multiple(vec f, vec g)
-      const;  // is cf = dg, some scalars c,d? (not both zero).
   vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const;
 
   bool vec_is_homogeneous(const FreeModule *F, const vec f) const;

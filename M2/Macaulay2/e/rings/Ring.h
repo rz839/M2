@@ -361,6 +361,8 @@ public:
                           int &hi) const = 0;
   virtual void vec_degree(const FreeModule *F, const vec f, int *d) const = 0;
   virtual bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const = 0;
+
+  virtual bool vec_is_scalar_multiple(vec f, vec g) const = 0;  // is cf = dg, some scalars c,d? (not both zero).
 };
 
 template <typename Derived>
@@ -592,6 +594,8 @@ public:
                           int &hi) const override;
   void vec_degree(const FreeModule *F, const vec f, int *d) const override;
   bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const override;
+
+  bool vec_is_scalar_multiple(vec f, vec g) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion
