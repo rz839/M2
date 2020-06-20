@@ -28,39 +28,6 @@ vec Ring::tensor(const FreeModule *F, vec v, const FreeModule *G, vec w) const
 //  Homogeniety and the grading //////////////
 //////////////////////////////////////////////
 
-bool Ring::vec_multi_degree(const FreeModule *F, const vec f, int *degf) const
-// Returns true if the element is homogeneous
-// Sets degf to be the highest degree found (actually, the join of the
-//   degree vectors occuring).
-{
-  int *degv;
-  degree_monoid()->one(degf);
-  if (f == NULL) return true;
-  bool result = multi_degree(f->coeff, degf);
-  degree_monoid()->mult(degf, F->degree(f->comp), degf);
-  degv = degree_monoid()->make_one();
-
-  for (vec v = f->next; v != 0; v = v->next)
-    {
-      bool ishom = multi_degree(v->coeff, degv);
-      result = result && ishom;
-      degree_monoid()->mult(degv, F->degree(v->comp), degv);
-
-      if (0 != degree_monoid()->compare(degf, degv))
-        {
-          result = false;
-          degree_monoid()->lcm(degf, degv, degf);
-        }
-    }
-  degree_monoid()->remove(degv);
-  return result;
-}
-
-void Ring::vec_degree(const FreeModule *F, const vec f, int *degf) const
-{
-  vec_multi_degree(F, f, degf);
-}
-
 bool Ring::vec_is_homogeneous(const FreeModule *F, const vec f) const
 {
   if (!this->is_graded()) return false;

@@ -823,3 +823,40 @@ void RingBase<D>::vec_degree_weights(const FreeModule *F,
       if (lo1 < lo) lo = lo1;
     }
 }
+
+template <typename D>
+void RingBase<D>::vec_degree(const FreeModule *F, const vec f, int *degf) const
+{
+  vec_multi_degree(F, f, degf);
+}
+
+
+// returns true iff f is homogeneous
+template <typename D>
+bool RingBase<D>::vec_multi_degree(const FreeModule *F, const vec f, int *degf) const
+// Returns true if the element is homogeneous
+// Sets degf to be the highest degree found (actually, the join of the
+//   degree vectors occuring).
+{
+  int *degv;
+  degree_monoid()->one(degf);
+  if (f == NULL) return true;
+  bool result = multi_degree(f->coeff, degf);
+  degree_monoid()->mult(degf, M2::bugfix::degree(F, f->comp), degf);
+  degv = degree_monoid()->make_one();
+
+  for (vec v = f->next; v != 0; v = v->next)
+    {
+      bool ishom = multi_degree(v->coeff, degv);
+      result = result && ishom;
+      degree_monoid()->mult(degv, M2::bugfix::degree(F, v->comp), degv);
+
+      if (0 != degree_monoid()->compare(degf, degv))
+        {
+          result = false;
+          degree_monoid()->lcm(degf, degv, degf);
+        }
+    }
+  degree_monoid()->remove(degv);
+  return result;
+}

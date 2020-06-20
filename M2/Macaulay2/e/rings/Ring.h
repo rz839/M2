@@ -359,6 +359,8 @@ public:
                           M2_arrayint wts,
                           int &lo,
                           int &hi) const = 0;
+  virtual void vec_degree(const FreeModule *F, const vec f, int *d) const = 0;
+  virtual bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const = 0;
 };
 
 template <typename Derived>
@@ -588,6 +590,8 @@ public:
                           M2_arrayint wts,
                           int &lo,
                           int &hi) const override;
+  void vec_degree(const FreeModule *F, const vec f, int *d) const override;
+  bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const override;
 };
 
 #include "Ring.hpp"  // safe but confuses CLion

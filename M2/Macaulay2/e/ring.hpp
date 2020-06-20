@@ -103,10 +103,6 @@ public:
       const;  // is cf = dg, some scalars c,d? (not both zero).
   vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const;
 
-  bool vec_multi_degree(const FreeModule *F, const vec f, int *degf) const;
-  // returns true iff f is homogeneous
-
-  void vec_degree(const FreeModule *F, const vec f, int *d) const;
   bool vec_is_homogeneous(const FreeModule *F, const vec f) const;
 };
 
