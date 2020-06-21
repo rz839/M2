@@ -1,7 +1,6 @@
 // Copyright 2004 Michael E. Stillman
 
-#ifndef _polyring_hpp_
-#define _polyring_hpp_
+#pragma once
 
 #include "ringelem.hpp"
 #include "engine.h"
@@ -42,6 +41,11 @@ static_assert(!RZ_CRTP, "something is off");
 // template <typename Derived>
 // class PolynomialRingBase : RingBase<Derived> {};
 // no complete ring should be needed
+
+class IPolynomialRing : virtual IRing
+{
+
+};
 
 class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRing>, Ring>
 {
@@ -406,21 +410,36 @@ class PolynomialRing : public std::conditional_t<RZ_CRTP, RingBase<PolynomialRin
   vec vec_remove_monomial_factors(vec f, bool make_squarefree_only) const override;
 };
 
-/**
- * \ingroup polynomialrings
- */
+/*******************************************************************************
+ *   POLY-RING-FLAT
+ *
+ *   Some description ...
+ ******************************************************************************/
+
+#if RZ_USE_CRTP
+class IPolyRing : public virtual IPolynomialRing
+{
+  // NOTE(RZ): the class does not extend the interface, so is useless in the crtp case
+};
+
+using PolyRing = IPolyRing;
+
+template <typename Derived>
+class PolyRingFlatBase : public IPolyRing,
+                         public PolynomialRingBase<Derived>
+{
+public:
+  Nterm* numerator(ring_elem f) const override { return f.poly_val; }
+  const PolyRingFlat* cast_to_PolyRingFlat() const override { return this; }
+  PolyRingFlat *cast_to_PolyRingFlat() override { return this; }
+};
+#endif
+
 class PolyRingFlat : public PolynomialRing
 // The class of polynomial rings implemented as a pointer (single value).
 {
  public:
-  virtual Nterm *numerator(ring_elem f) const { return f.poly_val; }
-  virtual const PolyRingFlat *cast_to_PolyRingFlat() const { return this; }
-  virtual PolyRingFlat *cast_to_PolyRingFlat() { return this; }
+  Nterm *numerator(ring_elem f) const override { return f.poly_val; }
+  const PolyRingFlat *cast_to_PolyRingFlat() const override { return this; }
+  PolyRingFlat *cast_to_PolyRingFlat() override { return this; }
 };
-
-#endif
-
-// Local Variables:
-// compile-command: "make -C $M2BUILDDIR/Macaulay2/e "
-// indent-tabs-mode: nil
-// End:
