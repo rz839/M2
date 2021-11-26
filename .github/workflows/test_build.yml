@@ -19,7 +19,7 @@ on:
       - developement
   schedule:
     # cron time in UTC; set to 6a EDT
-    - cron: '0 10 * * *'
+    # - cron: '0 10 * * *'
 
 env:
 #  CMAKE_VERSION: 3.17
